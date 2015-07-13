@@ -1,0 +1,26 @@
+baseurl = "/"
+languageCode = "en-us"
+title = "Open vStorage"
+theme = "landing"
+contentdir = "content"
+staticdir = "static"
+publishdir = "site"
+relativeURLs = true
+
+[[params.social]]
+    title = "twitter"
+    icon = "twitter"
+    url = "http://twitter.com/openvstorage"
+
+[[params.social]]
+    title = "Mail List"
+    icon = "envelope-o"
+    url = "http://openvstorage.us8.list-manage.com/subscribe/post?u=a1e02df05c5bb9eb7af42dcff&id=cc01c4bd54"
+
+[[params.social]]
+    title = "White Paper"
+    icon = "download"
+    url = "http://download.openvstorage.com/whitepaper_ObjectStorage.php"
+
+[permalinks]
+    post = "/:filename"

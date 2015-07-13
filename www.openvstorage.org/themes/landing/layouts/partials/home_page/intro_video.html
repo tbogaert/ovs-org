@@ -1,0 +1,7 @@
+{{ range $element :=  .Data.Pages }}
+	{{ if eq .Section "home" }}
+		{{ if eq .Title "intro_video" }}
+			{{ .Content }}
+		{{ end }}
+	{{ end }}
+{{ end }}	

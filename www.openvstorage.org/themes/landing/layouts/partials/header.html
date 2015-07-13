@@ -1,0 +1,62 @@
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">{{ .Site.Title }}</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#">HOME</a>
+                </li>
+                <li>
+                    <a href="/features">FEATURES</a>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">DOCUMENTATION<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/doc/openvstorage_Home">Documentation Home</a></li>
+                        <li><a href="/doc/Essentials">Essentials</a></li>
+                        <li><a href="/doc/Getting Started">Getting Started</a></li>
+                        <li><a href="/doc/Installation">Installation</a></li>
+                        <li><a href="/doc/Using the GUI">Using the GUI</a></li>
+                        <li><a href="/doc/Using the API">Using the API</a></li>
+                        <li><a href="/doc/Using the CLI">Using the CLI</a></li>
+                        <li><a href="/doc/knownissues">Known Issues</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">HOW TO<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        {{ range $element :=  .Site.Pages }}
+                            {{ if eq .Params.tag "howto" }}
+                                <li><a href="{{ $element.RelPermalink }}">{{ $element.Title }}</a></li>
+                            {{ end }}
+                        {{ end }}
+
+                    </ul>
+                </li>
+                <li>
+                    <a href="/support">SUPPORT</a>
+                </li>
+                <li>
+                    <a href="/contribute">CONTRIBUTE</a>
+                </li>
+                <li>
+                    <a href="/contactus">CONTACT</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+

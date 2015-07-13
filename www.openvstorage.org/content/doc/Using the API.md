@@ -1,0 +1,1495 @@
++++
+#Don't remove title!
+title = "Using the API"
++++
+
+
+### Introduction
+
+Open vStorage comes with a RESTful API. This section is intended for
+anyone who wants to integrate their application with Open vStorage. The
+API is not only for external developpers but is also used by the Open
+vStorage GUI. Don't forget to let us know how you integrate with Open
+vStorage and if you have issues you can always ask the [Open vStorage
+community](https://groups.google.com/forum/#!forum/open-vstorage) for
+help.
+
+###Security
+
+The API should only be used over HTTPS. Never relay the API trough an
+insecure channel.
+
+### Authentication
+
+The API uses OAuth 2 for authentication. Two grant types are
+implemented:
+
+-   Resource Owner Password Credentials Grant
+    -   Reserved for the GUI. Do *not* use this grant type for third
+        party applications.
+-   Client Credentials
+    -   Clients can be created trough the Open vStorage GUI
+        (Administration \> User Management)
+    -   All third party applications should ask the user to create such
+        a Client and let the user enter its "Client ID" and "Client
+        secret" in the third party application.
+    -   All third party applications must store the provided Client
+        Credentials in a secure manner. Only the application should be
+        able to view/use the Client Credentials.
+
+### Requesting Access Tokens
+
+Once provided with the "Client ID" and "Client secret", an Access Token
+can be requested. This Access Token can be used for further
+communication with the API.
+
+-   Post variables:
+    -   grant\_type: "client\_credentials"
+    -   scope: (optional) a space delimited list of scopes that should
+        be linked to the Access token. Omit if all scopes available to
+        the Client must be available.
+-   Basic authentication
+    -   Using "Client ID" and "Client secret"
+
+Example request:
+
+~~~~ {.sourceCode .python}
+POST /api/oauth2/token/ HTTP/1.1
+Host: <ip address>
+Authorization: Basic MzMyZTFhYTgtYjc5Ni00M2ZhLThjN2EtZDYxZDM1ODlkMDBiOlRaQHl6SUpnIVVCTCw+cFZ9Ik9BUyxyNUVoUmdxSkREXSoycjBLI0NfSjptTiIqQUJfLTA5dFM9OyJDMmtbUjg=
+Cache-Control: no-cache
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=client_credentials
+~~~~
+
+Returns an "application/json" object with:
+
+-   access\_token: The generated Access Token
+-   token\_type: "bearer"
+-   expires\_in: 3600 (one hour)
+
+Example response:
+
+~~~~ {.sourceCode .python}
+{
+    "access_token": ":kx@m/@r>}3A~O6g27LE8xubMvvbx\"|t\"ThUKR22TL49Ty,>R?-a]|'mj?Wgil*|",
+    "token_type": "bearer",
+    "expires_in": 3600
+}
+~~~~
+
+This response is json, so make sure the json is parsed (e.g. on the
+above access\_token, the double quotes inside the token are escaped)
+
+### Using Access Tokens
+
+The obtained Access Token should be provided on each request to the API
+using an Authorization type "Bearer" header.
+
+Example request:
+
+~~~~ {.sourceCode .python}
+GET /api/storagerouters/ HTTP/1.1
+Host: <ip address>
+Authorization: Bearer :kx@m/@r>}3A~O6g27LE8xubMvvbx"|t"ThUKR22TL49Ty,>R?-a]|'mj?Wgil*|
+Accept: application/json; version=1
+Cache-Control: no-cache
+Content-Type: application/x-www-form-urlencoded
+~~~~
+
+Once the token is expired, a 401 Unauthorized error will be returned,
+stating "Token expired". Other possible errors are listed in the "API
+information/metadata" chapter in this documentation.
+
+###Versioning
+
+The Open vStorage API supports versioning. All requests to resources
+need a version to be specified. This can be a specific version, or \*
+for the latest version. The version needs to be specified via the Accept
+header.
+
+Example request:
+
+~~~~ {.sourceCode .python}
+GET /api/storagerouters/ HTTP/1.1
+Host: <ip address>
+Authorization: Bearer :kx@m/@r>}3A~O6g27LE8xubMvvbx"|t"ThUKR22TL49Ty,>R?-a]|'mj?Wgil*|
+Accept: application/json; version=1
+Cache-Control: no-cache
+Content-Type: application/x-www-form-urlencoded
+~~~~
+
+Information regarding the available versions can be fetched from
+executing a GET on the root of the API.
+
+### API information/metadata
+
+By issuing a GET to the root of the API, information of the API can be
+retreived, such as the current authentication state, the available
+versions, the ip addresses of all Storage Routers and - if authenticated
+- information about the current logged in user.
+
+Example request (not authenticating since there's no Authorization
+header)
+
+~~~~ {.sourceCode .python}
+GET /api HTTP/1.1
+Host: <ip address>
+Cache-Control: no-cache
+~~~~
+
+Available fields in the response:
+
+-   authenticated: States whether the request was authenticated.
+-   authentication\_state: Information about the authentication.
+    -   "unauthenticated": No Authorization header was given.
+    -   "invalid authorization type": When not using a Bearer token
+        (e.g. when just using Basic authentication).
+    -   "invalid token": The given token was invalid or not found in the
+        database.
+    -   "token expired": The given token is expired (and is now
+        scheduled for removal, so subsequent tries might return "invalid
+        token").
+    -   "inactive user": The token matched a valid user, but the user's
+        status is inactive and should not be used.
+    -   "unexpected exception": Most likely, some invalid/corrupt data
+        was send to the API.
+-   username: The username of the authenticated user, if any.
+-   userguid: The GUID (identifier) of the user, if any.
+-   storagerouter\_ips: The ip addresses of all Storage Routers
+    available.
+-   versions: All available API versions.
+-   roles: All roles/scopes that are available when using this token.
+
+Example response (when not authenticated):
+
+~~~~ {.sourceCode .python}
+{
+    "username": null,
+    "authenticated": false,
+    "roles": [],
+    "versions": [
+        1
+    ],
+    "authentication_state": "invalid token",
+    "storagerouter_ips": [
+        <ip address>,
+        <ip address>
+    ],
+    "userguid": null
+}
+~~~~
+
+Example response (when authenticated):
+
+~~~~ {.sourceCode .python}
+{
+    "username": "admin",
+    "authenticated": true,
+    "roles": [
+        "write",
+        "manage",
+        "read"
+    ],
+    "versions": [
+        1
+    ],
+    "authentication_state": null,
+    "storagerouter_ips": [
+        <ip address>,
+        <ip address>
+    ],
+    "userguid": "26b78431-7eb1-4df2-95cb-8af3be883f54"
+}
+~~~~
+
+###API Resources
+
+The current API provides access to following resources:
+
+-   branding: Brandings of the Open vStorage node.
+-   clients: OAuth 2 clients.
+-   groups: The groups a user can belong to.
+-   mgmtcenters: Hypervisor management centers (e.g. a VMware VCenter
+    server, OpenStack Controller Node).
+-   pmachines: The Physical Machines (hypervisors) known to the Open
+    vStorage cluster.
+-   roles: All different roles/scopes available to groups, clients and
+    tokens.
+-   storagedrivers: All Storage Driver instances.
+-   storagerouters: All Storage Routers of the Cluster, either running
+    virtually (e.g. on VMWare) or physical (e.g. on KVM).
+-   tasks: The celery tasks which are active, scheduled, reserved or
+    revoked. These tasks are the results of actions performed on the
+    Open vStorage Cluster.
+-   users: The users which are registered in the Open vStorage Cluster.
+-   vdisks: Virtual disk served by Open vStorage. vDisks can be part of
+    a vMachine or stand-alone.
+-   vmachines: The Virtual Machines in the Cluster.
+-   vpools: The vPools which can be used to deploy vMachines.
+
+It also provides two "special" resources:
+
+-   messages: Access to the management system for sending messages to
+    the GUI by using a long-polling mechanism.
+-   statistics: Statistical information about the DAL (Data Abstraction
+    Layer).
+
+###General usage
+
+### OPTIONS
+
+When using CORS, each call can be preflighted by sending the OPTIONS
+HTTP verb, providing a correct Access-Control-Allow-Origin header.
+
+### GET /api/:resource/
+
+Fetch a list of resource GUIDs or resource objects. This is available on
+all resources.
+
+-   Request headers:
+    -   Accept
+        -   application/json
+        -   text/html
+    -   Access-Control-Allow-Origin (CORS only)
+-   Query parameters:
+    -   sort (optional - no sorting if omitted)
+        -   A comma separated list of fields
+        -   Prefix fields with a dash (-) for reverse sorting
+        -   Dictionary fields can have a key specified (e.g.
+            my\_propertymy\_key)
+        -   Example:
+            sort=field\_one,-field\_two,dict\_fieldmy\_key,other\_field
+    -   page (optional - all resources if omitted)
+        -   An integer indicating which page to return (10 entries per
+            page)
+        -   Invalid pages will return the first (page \< 0) or last
+            (page \> number of pages) page
+        -   Example: page=3
+    -   contents (optional - list of GUIDs if omitted)
+        -   If this parameter is passed, a list of object will be
+            returned instead of a list of GUIDs
+        -   If this parameter is passed, all static properties will be
+            returned by default
+        -   A comma separated list of fields that should be returned
+            (next to the static properties)
+        -   Special fields can be requested
+            -   \_dynamics: Include all dynamic properties
+            -   \_relations: Include foreign keys and lists of primary
+                keys of linked objects
+        -   Prefix fields with a dash (-) to explicitly exclude them
+            (e.g. to exclude one dynamic property when \_dynamics was
+            passed)
+        -   Examples:
+            -   contents= (only show static properties)
+            -   contents=dynamic\_property\_1,dynamic\_property\_2
+                (static properties plus 2 dynamic properties)
+            -   contents=\_dynamic,-dynamic\_property\_2,\_relations
+                (static properties, all dynamic properties except for
+                dynamic\_property\_2 plus all relations)
+    -   (see resource specific information for more parameters)
+-   Response headers:
+    -   Content-Type
+        -   application/json
+        -   text/html
+    -   Access-Control-Allow-Origin (CORS preflight only)
+    -   Access-Control-Allow-Credentials (CORS preflight only)
+    -   Access-Control-Allow-Headers (CORS preflight only)
+    -   Access-Control-Allow-Methods (CORS preflight only)
+-   Response object:
+    -   A list of GUIDs or a list of objects (depending on the content
+        parameter)
+    -   Fields containing passwords will never be sent
+    -   (see resource specific information for object structure)
+-   Status codes:
+    -   200 (OK)
+    -   401 (Unauthorized)
+    -   (see resource specific status codes)
+
+### POST /api/:resource/
+
+Create a new object. Not available for all resources. See for possible
+resource actions below.
+
+-   Request headers:
+    -   Accept
+        -   application/json
+        -   text/html
+    -   Access-Control-Allow-Origin (CORS only)
+-   Query parameters:
+    -   None
+-   Response headers:
+    -   Content-Type
+        -   application/json
+        -   text/html
+    -   Access-Control-Allow-Origin (CORS preflight only)
+    -   Access-Control-Allow-Credentials (CORS preflight only)
+    -   Access-Control-Allow-Headers (CORS preflight only)
+    -   Access-Control-Allow-Methods (CORS preflight only)
+-   Response object:
+    -   One of two possibilities:
+        -   The object that was just created
+        -   A description of the errors occurred during object creation
+-   Status codes:
+    -   201 (Created)
+    -   400 (Bad request)
+    -   401 (Unauthorized)
+
+### GET /api/:resource/:guid/
+
+Fetch a resource. By default only static properties will be returned.
+
+-   Request headers:
+    -   Accept
+        -   application/json
+        -   text/html
+    -   Access-Control-Allow-Origin (CORS only)
+-   Query parameters:
+    -   contents (optional - list of GUIDs if omitted)
+        -   If this parameter is passed, a list of object will be
+            returned instead of a list of GUIDs
+        -   If this parameter is passed, all static properties will be
+            returned by default
+        -   A comma separated list of fields that should be returned
+            (next to the static properties)
+        -   Special fields can be requested
+            -   \_dynamics: Include all dynamic properties
+            -   \_relations: Include foreign keys and lists of primary
+                keys of linked objects
+        -   Prefix fields with a dash (-) to explicitly exclude them
+            (e.g. to exclude one dynamic property when \_dynamics was
+            passed)
+        -   Examples: See GET /api/:resource/
+    -   (see resource specific information for more parameters)
+-   Response headers:
+    -   Content-Type
+        -   application/json
+        -   text/html
+    -   Access-Control-Allow-Origin (CORS preflight only)
+    -   Access-Control-Allow-Credentials (CORS preflight only)
+    -   Access-Control-Allow-Headers (CORS preflight only)
+    -   Access-Control-Allow-Methods (CORS preflight only)
+-   Response object:
+    -   Fields containing passwords will never be sent
+    -   (see resource specific information for object structure)
+-   Status codes:
+    -   200 (OK)
+    -   401 (Unauthorized)
+    -   404 (Not found)
+    -   (see resource specific status codes)
+
+### DELETE /api/:resource/:guid/
+
+Deletes a given resource
+
+-   Request headers:
+    -   Accept
+        -   application/json
+        -   text/html
+    -   Access-Control-Allow-Origin (CORS only)
+-   Query parameters:
+    -   None
+-   Response headers:
+    -   Content-Type
+        -   application/json
+        -   text/html
+    -   Access-Control-Allow-Origin (CORS preflight only)
+    -   Access-Control-Allow-Credentials (CORS preflight only)
+    -   Access-Control-Allow-Headers (CORS preflight only)
+    -   Access-Control-Allow-Methods (CORS preflight only)
+-   Response object:
+    -   None
+-   Status codes:
+    -   204 (No content)
+    -   401 (Unauthorized)
+    -   404 (Not found)
+
+### PATCH /api/:resource/:guid/
+
+Updates a set of properties of a given resource.
+
+-   Request headers:
+    -   Accept
+        -   application/json
+        -   text/html
+    -   Access-Control-Allow-Origin (CORS only)
+-   Query parameters:
+    -   None
+-   Response headers:
+    -   Content-Type
+        -   application/json
+        -   text/html
+    -   Access-Control-Allow-Origin (CORS preflight only)
+    -   Access-Control-Allow-Credentials (CORS preflight only)
+    -   Access-Control-Allow-Headers (CORS preflight only)
+    -   Access-Control-Allow-Methods (CORS preflight only)
+-   Response object:
+    -   One of two possibilities:
+        -   The object that was just updated
+        -   A description of the errors occurred during object update
+-   Status codes:
+    -   202 (Accepted)
+    -   400 (Bad request)
+    -   401 (Unauthorized)
+    -   404 (Not found)
+
+### POST /api/:resource/:guid/:action
+
+Executes an action on a given resource. Not available for all resources.
+See for possible resource actions below.
+
+-   Request headers:
+    -   Accept
+        -   application/json
+        -   text/html
+    -   Access-Control-Allow-Origin (CORS only)
+-   Query parameters:
+    -   None
+-   Response headers:
+    -   Content-Type
+        -   application/json
+        -   text/html
+    -   Access-Control-Allow-Origin (CORS preflight only)
+    -   Access-Control-Allow-Credentials (CORS preflight only)
+    -   Access-Control-Allow-Headers (CORS preflight only)
+    -   Access-Control-Allow-Methods (CORS preflight only)
+-   Response object:
+    -   (see resource specific information for object structure)
+-   Status codes:
+    -   200 (OK)
+    -   401 (Unauthorized)
+    -   404 (Not found)
+
+### GET /api/:resource/:guid/:link
+
+Fetch specialized information related to the given object. Not available
+for all resources. See for possible resource actions below.
+
+-   Request headers:
+    -   Accept
+        -   application/json
+        -   text/html
+    -   Access-Control-Allow-Origin (CORS only)
+-   Query parameters:
+    -   None
+-   Response headers:
+    -   Content-Type
+        -   application/json
+        -   text/html
+    -   Access-Control-Allow-Origin (CORS preflight only)
+    -   Access-Control-Allow-Credentials (CORS preflight only)
+    -   Access-Control-Allow-Headers (CORS preflight only)
+    -   Access-Control-Allow-Methods (CORS preflight only)
+-   Response object:
+    -   (see resource specific information for object structure)
+-   Status codes:
+    -   200 (OK)
+    -   401 (Unauthorized)
+    -   404 (Not found)
+
+### Brandings
+
+### Branding object structure
+
+-   guid: GUID of the Branding.
+-   productname: Commercial product name in this Branding.
+-   is\_default: Boolean indicating whether this is the default brand.
+-   css: The GUI main css filename.
+-   name: The brand name.
+-   description: A description of the brand.
+
+### Example data
+
+~~~~ {.sourceCode .python}
+{
+    "guid": "208b423f-ce8c-4cb5-8e64-736f179ab5b9",
+    "productname": "Open vStorage",
+    "is_default": true,
+    "css": "bootstrap-default.min.css",
+    "name": "Default",
+    "description": "Default bootstrap theme"
+}
+~~~~
+
+### Branding actions
+
+Main actions:
+
+-   List: GET
+-   Resource: GET
+
+WARNING: UNSUPPORTED DOC, TABLES NOT SUPPORT YET.
+
+### Clients
+
+### Client object structure
+
+-   guid: GUID of the Client.
+-   name: Name of the Client.
+-   ovs\_type: Type of the Client within OVS.
+-   client\_secret: The Client's secret key.
+-   grant\_type: The Client's grant type.
+-   client\_id: The Client's ID.
+-   user\_guid: GUID of the User this Client belongs to.
+-   tokens\_guids: A list of GUIDS of the bearer tokens that exist for
+    this Client.
+-   roles\_guids: A list of GUIDS of all roles that are active/available
+    for this Client.
+
+### Example data
+
+~~~~ {.sourceCode .python}
+{
+    "guid": "332e1aa8-b796-43fa-8c7a-d61d3589d00b",
+    "name": "test",
+    "ovs_type": "USER",
+    "client_secret": "TZ@yzIJg!UBL,>pV}\"OAS,r5EhRgqJDD]*2r0K#C_J:mN\"*AB_-09tS=;\"C2k[R8",
+    "grant_type": "CLIENT_CREDENTIALS",
+    "client_id": "332e1aa8-b796-43fa-8c7a-d61d3589d00b",
+    "user_guid": "26b78431-7eb1-4df2-95cb-8af3be883f54",
+    "tokens_guids": [],
+    "roles_guids": [
+        "d3874784-dd97-4784-8d0f-e60d7ce4b04e",
+        "d124c2ad-ffda-4cea-a93d-66ef0f796e77",
+        "c6dd0fc8-3170-43de-a466-a00bb3eb2d84"
+    ]
+}
+~~~~
+
+### Client actions
+
+Main actions:
+
+-   List: GET
+-   Resource: GET, POST, DELETE
+
+WARNING: UNSUPPORTED DOC, TABLES NOT SUPPORT YET.
+
+### Groups
+
+### Group object structure
+
+-   guid: GUID of the Group.
+-   name: Name of the Group.
+-   description: Description of the Group
+-   users\_guids: A list of GUIDS of the Users that have this Group
+    configured.
+-   roles\_guids: A list of GUIDS of the Roles that are active/enabled
+    for this Group.
+
+### Example data
+
+~~~~ {.sourceCode .python}
+{
+    "guid": "d804177f-985a-441c-8053-b59094a5f1aa",
+    "name": "viewers",
+    "description": "Viewers",
+    "users_guids": [],
+    "roles_guids": [
+        "65c6807d-4395-4f63-82c2-2e3fb89065b9"
+    ]
+}
+~~~~
+
+### Group actions
+
+Main actions:
+
+-   List: GET
+-   Resource: GET
+
+WARNING: UNSUPPORTED DOC, TABLES NOT SUPPORT YET.
+
+###Management Centers
+
+### Management center object structure
+
+-   guid: GUID of the Management Center.
+-   name: Name of the Management Center.
+-   username: Username for the Management Center.
+-   ip: IP address of the Management Center.
+-   port: Port of the Management Center's API.
+-   type: Type of the Management Center.
+-   description: Description of the Management Center.
+-   hosts: A dynamic list of all hosts that are managed by this
+    Management Center, which may or may not be represented by pMachines.
+-   pmachine\_guids: A list of pMachine GUIDS managed by this Management
+    Center.
+
+### Example data
+
+~~~~ {.sourceCode .python}
+{
+    "guid": "ad406114-5066-4238-a64f-8ff9ce7aba38",
+    "name": "vcenter",
+    "username": "root",
+    "ip": "10.100.169.250",
+    "port": 443,
+    "type": "VCENTER",
+    "description": null,
+    "hosts": {
+        "host-140": {
+            "ips": [
+                "10.100.169.253",
+                "172.22.1.1"
+            ],
+            "name": "10.100.169.253"
+        },
+        "host-12": {
+            "ips": [
+                "10.100.169.254",
+                "172.22.1.1"
+            ],
+            "name": "10.100.169.254"
+        },
+        "host-30": {
+            "ips": [
+                "10.100.169.242",
+                "172.22.1.5",
+                "172.23.1.5"
+            ],
+            "name": "10.100.169.242"
+        }
+    },
+    "pmachines_guids": []
+}
+~~~~
+
+### Management Center actions
+
+Main actions:
+
+-   List: GET
+-   Resource: GET, POST, DELETE
+
+WARNING: UNSUPPORTED DOC, TABLES NOT SUPPORT YET.
+
+### pMachines
+
+### pMachine object structure
+
+-   guid: GUID of the pMachine.
+-   hypervisor\_id: The internal ID of the hypervisor, if available.
+-   username: The username to connect to the pMachine.
+-   name: The name of the pMachine.
+-   ip: The ip address of the pMachine.
+-   description: The description of the pMachine.
+-   hvtype: The hypervisor type of the pMachine.
+-   host\_status: The host's status.
+-   mgmtcenter\_guid: The GUID of the linked Management Center.
+-   vmachines\_guids: A list of vMachine GUID running on this pMachine.
+-   storagerouters\_guids: A list of StorageRouter GUIDS that are
+    available to this pMachine.
+
+### Example data
+
+~~~~ {.sourceCode .python}
+{
+    "guid": "db68cada-f7f3-4830-987b-6491ce02f6de",
+    "hypervisor_id": null,
+    "username": "root",
+    "name": "esxi154",
+    "ip": "10.100.169.254",
+    "description": null,
+    "hvtype": "VMWARE",
+    "host_status": "UNKNOWN",
+    "mgmtcenter_guid": null,
+    "vmachines_guids": [],
+    "storagerouters_guids": [
+        "d019e8df-b398-4095-9915-516b90780df7"
+    ]
+}
+~~~~
+
+### pMachine actions
+
+Main actions:
+
+-   List: GET
+-   Resource: GET, PATCH
+
+WARNING: UNSUPPORTED DOC, TABLES NOT SUPPORT YET.
+
+### Roles
+
+### Role object structure
+
+-   guid: GUID of the Role.
+-   name: Name of the Role.
+-   code: Code of the Role.
+-   description: Description of the Role.
+-   tokens\_guids: A list of Token GUIDs that are currently using this
+    Role.
+-   clients\_guids: A list of Client GUIDs that are currently using this
+    Role.
+-   groups\_guids: A list of Group GUIDs that are currently using this
+    Role.
+
+### Example data
+
+~~~~ {.sourceCode .python}
+{
+    "guid": "beeff03e-6c7e-491c-bf8f-425aaf6948fe",
+    "name": "Manage",
+    "code": "manage",
+    "description": "Can manage the system",
+    "tokens_guids": [
+        "a417c519-1d6d-4732-a207-20e475a5653a",
+        "bf8a7378-1b3a-434f-bad6-649701ce0e5c",
+        "bd6d3c2c-4649-4021-a64e-701cd164b251",
+        "705c8ed3-717a-48b9-925e-20ca1063b1ef",
+        "e29345eb-514a-4ad5-af78-2a0f2cf4bd3d"
+    ],
+    "clients_guids": [
+        "0bbd0ebd-02c0-441b-a6ee-0c8b40055fc9",
+        "d3874784-dd97-4784-8d0f-e60d7ce4b04e"
+    ],
+    "groups_guids": [
+        "14b83622-f11f-4580-a485-ab8ae8326d42"
+    ]
+}
+~~~~
+
+### Role actions
+
+Main actions:
+
+-   List: GET
+-   Resource: GET
+
+WARNING: UNSUPPORTED DOC, TABLES NOT SUPPORT YET.
+
+### StorageDrivers
+
+### StorageDriver object structure
+
+-   guid: GUID of the StorageDriver.
+-   storagedriver\_id: ID of the StorageDriver as known by the
+    StorageDriver processes.
+-   mountpoint\_foc: Failover Cache mountpoint.
+-   mountpoint: Mountpoint on which the served vPool is available.
+-   mountpoint\_md: Metadata mountpoint.
+-   mountpoint\_temp: Temporary data mountpoint (used for e.g.
+    scrubbing).
+-   mountpoint\_writecache: Mountpoint of the StorageDriver's write
+    cache.
+-   mountpoint\_readcache1: First mountpoint for the StorageDriver's
+    read cache.
+-   mountpoint\_readcache2: Second mountpoint for the StorageDriver's
+    read cache.
+-   mountpoint\_bfs: Mountpoint where the actual data is stored, in case
+    of a LOCAL or DISTRIBUTED type backend.
+-   name: Name of the StorageDriver.
+-   description: Description of the StorageDriver.
+-   port: Base port of the StorageDriver process.
+-   cluster\_ip: Ip for inter-StorageDriver communications.
+-   storage\_ip: Ip on which to expose the mountpoint, in case of
+    VMware.
+-   statistics: Aggregated statistics from all this StorageDriver's
+    vDisks. See vDisk.statistics.
+-   status: StorageDriver status.
+-   stored\_data: Amount of data stored on the StorageDriver.
+-   storagerouter\_guid: GUID of the StorageRouter running this
+    StorageDriver.
+-   vpool\_guid: GUID of the vPool provided by this StorageDriver.
+
+### Example data
+
+~~~~ {.sourceCode .python}
+{
+    "guid": "8ceb873a-7b60-4a8f-b91f-c373ce65ea07",
+    "storagedriver_id": "local0050569647a1",
+    "mountpoint_foc": "/mnt/cache1",
+    "mountpoint": "/mnt/local",
+    "mountpoint_md": "/mnt/md",
+    "mountpoint_temp": "/var/tmp",
+    "mountpoint_writecache": "/mnt/cache1",
+    "name": "local0050569647a1",
+    "mountpoint_bfs": "/mnt/bfs/local",
+    "description": "local0050569647a1",
+    "port": 12323,
+    "mountpoint_readcache2": "",
+    "cluster_ip": "10.100.169.100",
+    "storage_ip": "172.22.1.100",
+    "mountpoint_readcache1": "/mnt/cache1",
+    "statistics": {
+        ...
+    },
+    "status": null,
+    "stored_data": 0,
+    "storagerouter_guid": "a8743428-9bb8-478f-ac4e-366d273db96d",
+    "vpool_guid": "e9146a46-2ca2-4f09-93f4-9101e0ffd439"
+}
+~~~~
+
+### StorageDriver actions
+
+Main actions:
+
+-   List: GET
+-   Resource: GET
+
+WARNING: UNSUPPORTED DOC, TABLES NOT SUPPORT YET.
+
+### StorageRouters
+
+### StorageRouter object structure
+
+-   guid: GUID of the StorageRouter.
+-   machine\_id: Internal machine identifier of the StorageRouter.
+-   ip: Ip for inter-StorageRouter communication.
+-   heartbeats: Heartbeat timestamps for different StorageRouter
+    components.
+-   name: Name of the StorageRouter.
+-   description: Description of the StorageRouter.
+-   failover\_mode: Status of the StorageRouter failover mode.
+-   vmachines\_guids: List of vMachine GUIDs served by this
+    StorageRouter.
+-   vpools\_guids: List of vPool GUIDs served by this StorageRouter.
+-   vdisks\_guids: List of vDisk GUIDs served by this StorageRouter.
+-   status: Status of the StorageRouter.
+-   statistics: Aggregated statistics from all this StorageRouter's
+    vDisks. See vDisk.statistics.
+-   stored\_data: Amount of data stored by this StorageRouter's vPools.
+-   pmachine\_guid: The GUID of the pMachine hosting this StorageRouter.
+-   storagedrivers\_guids: A list of StorageDriver GUIDs served by this
+    StorageRouter.
+
+### Example data
+
+~~~~ {.sourceCode .python}
+{
+    "guid": "a8743428-9bb8-478f-ac4e-366d273db96d",
+    "machine_id": "0050569647a1",
+    "ip": "10.100.169.100",
+    "heartbeats": {
+        "celery": 1412167861,
+        "process": 1412167861
+    },
+    "name": "ovs100",
+    "description": null,
+    "failover_mode": "OK_STANDALONE",
+    "vmachines_guids": [
+        "67328b8e-d2a8-4d3b-979d-f39362df9471",
+        "86041df1-fa32-4377-97ed-e07cfc67d896"
+    ],
+    "vpools_guids": [
+        "e9146a46-2ca2-4f09-93f4-9101e0ffd439"
+    ],
+    "vdisks_guids": [
+        "ba398bee-d9a0-4a80-9222-3220c313f63e",
+        "da1657cb-f42e-4678-85bf-d4d6eec4beae"
+    ],
+    "status": "OK",
+    "statistics": {
+        ...
+    },
+    "stored_data": 0,
+    "pmachine_guid": "64a60bb0-094a-4e6b-8e73-253a61fd63d3",
+    "storagedrivers_guids": [
+        "8ceb873a-7b60-4a8f-b91f-c373ce65ea07"
+    ]
+}
+~~~~
+
+### StorageRouter actions
+
+Main actions:
+
+-   List: GET
+-   Resource: GET
+
+WARNING: UNSUPPORTED DOC, TABLES NOT SUPPORT YET.
+
+### Users
+
+### User object structure
+
+-   guid: GUID of the User.
+-   username: Username of the User.
+-   is\_active: Boolean indicating if the User is active or disabled.
+-   language: Language of the User.
+-   group\_guid: GUID of the Group to which the User belongs.
+-   clients\_guids: A list of Client GUIDs available on this User.
+
+### Example data
+
+~~~~ {.sourceCode .python}
+{
+    "guid": "26b78431-7eb1-4df2-95cb-8af3be883f54",
+    "language": "en-US",
+    "username": "admin",
+    "is_active": true,
+    "group_guid": "f5844c80-837b-49c4-a26c-6a261cd5ed3c",
+    "clients_guids": [
+        "89f162df-d8f9-4e35-b841-681a1cd42544",
+        "332e1aa8-b796-43fa-8c7a-d61d3589d00b"
+    ]
+}
+~~~~
+
+### User actions
+
+Main actions:
+
+-   List: GET, POST
+-   Resource: GET, POST, PATCH, DELETE
+
+WARNING: UNSUPPORTED DOC, TABLES NOT SUPPORT YET.
+
+### vDisks
+
+### vDisk object structure
+
+-   guid: GUID of the vDisk.
+-   volume\_id: ID of the vDisk in the Open vStorage Volume Driver.
+-   description: Description of the vDisk.
+-   cinder\_id: ID in OpenStack Cinder (only applicable in case of
+    OpenStack).
+-   name: Name of the vDisk.
+-   parentsnapshot: Points to a parent voldrvsnapshotid. None if there
+    is no parent Snapshot.
+-   order: Order with which vDisk is attached to a vMachine. None if not
+    attached to a vMachine.
+-   devicename: The name of the container file (e.g. the VMDK-file)
+    describing the vDisk.
+-   size: Size of the vDisk in Bytes.
+-   storagedriver\_id: ID of the StorageDriver currently hosting the
+    vDisk.
+-   snapshots: List of vDisk snapshots.
+-   storagerouter\_guid: GUID of the StorageRouter currently running the
+    vDisk.
+-   info: Information of the vDisks stored by the vStorage Driver.
+    -   failover\_port: Port on which to connect for the FailOver Cache.
+    -   parent\_namespace: (obsolete).
+    -   failover\_mode: Status of the FailOver Cache.
+    -   stored: total Size in Bytes of the current data and the
+        Snapshots without the overhead imposed by the Backend
+        redundancy.
+    -   vrouter\_id: Id of the Virtual Storage Router application
+        serving the vDisk.
+    -   object\_type: Type of the vDisk.
+    -   namespace: Namespace of the vDisk on the Storage Backend.
+    -   halted: (obsolete).
+    -   volume\_size: Provisioned size in Bytes.
+    -   parent\_snapshot\_id: (internal).
+    -   lba\_size: size of the LBA unit.
+    -   parent\_volume\_id: guid of the parent of the vDisk. Empty
+        string if no parent exists.
+    -   cluster\_multiplier: cluster size of the vDisk in terms of the
+        LBA unit. Default value is 8.
+    -   volume\_id: ID of the vDisk in the Open vStorage Volume Driver.
+    -   footprint: amount of LBA addresses written in Bytes.
+    -   lba\_count: (obsolete).
+    -   sco\_multiplier: size of a SCO in cluster units. Default value
+        is 1024.
+    -   failover\_ip: IP address of the GSR where the FailOver Cache is
+        hosted.
+-   statistics: Performance statistics for the storage of the vDisk.
+    -   operations: Total amount of IO operations.
+    -   cluster\_cache\_misses\_ps: Amount of misses to the Content
+        Based Cluster Cache (read cache) per second averaged over the
+        last time it was requested. Zero in case no request was made in
+        the last 10 seconds.
+    -   data\_read: Amount of data (in Bytes) read by the vMachine.
+    -   sco\_cache\_misses: Amount of misses to the SCOcache (read/write
+        cache).
+    -   sco\_cache\_hits\_ps: Amount of hits to the SCOcache (read/write
+        cache) per second averaged over the last time it was requested.
+        Zero in case no request was made in the last 10 seconds.
+    -   sco\_cache\_hits: Amount of hits to the SCOcache (read/write
+        cache).
+    -   write\_operations: Amount of write operations performed by the
+        vMachine.
+    -   cluster\_cache\_misses: Amount of misses to the Content Based
+        Cluster Cache (read cache).
+    -   read\_operations\_ps: Amount of read operations performed by the
+        vMachine averaged over the last time it was requested. Zero in
+        case no request was made in the last 10 seconds.
+    -   sco\_cache\_misses\_ps: Amount of misses to the SCOcache
+        (read/write cache) averaged over the last time it was requested.
+        Zero in case no request was made in the last 10 seconds.
+    -   backend\_write\_operations: Amount of write operations to the
+        Storage Backend.
+    -   metadata\_store\_hits\_ps: Amount of hits for metadata pages
+        averaged over the last time it was requested. Zero in case no
+        request was made in the last 10 seconds.
+    -   metadata\_store\_misses: Amount of misses for metadata pages.
+    -   backend\_data\_written: Amount of data (in Bytes) writen to the
+        Storage Backend.
+    -   data\_read\_ps: Amount of data (in Bytes) read by the vMachine
+        averaged over the last time it was requested. Zero in case no
+        request was made in the last 10 seconds.
+    -   read\_operations: Amount of read operations performed by the
+        vMachine.
+    -   cluster\_cache\_hits: Amount of hits to the Content Based
+        Cluster Cache (read cache).
+    -   data\_written\_ps: Amount of data (in Bytes) written by the
+        vMachine averaged over the last time it was requested. Zero in
+        case no request was made in the last 10 seconds.
+    -   cluster\_cache\_hits\_ps: Amount of hits to the Content Based
+        Cluster Cache (read cache) averaged over the last time it was
+        requested. Zero in case no request was made in the last 10
+        seconds.
+    -   cache\_hits\_ps: Amount of cache hits averaged over the last
+        time it was requested. Zero in case no request was made in the
+        last 10 seconds.
+    -   timestamp: Time when the data was collected.
+    -   metadata\_store\_misses\_ps: Amount of misses for metadata pages
+        averaged over the last time it was requested. Zero in case no
+        request was made in the last 10 seconds.
+    -   backend\_data\_written\_ps: Amount of data (in Bytes) writen to
+        the Storage Backend averaged over the last time it was
+        requested. Zero in case no request was made in the last 10
+        seconds.
+    -   backend\_read\_operations: Amount of read operations from the
+        Storage Backend.
+    -   data\_written: Amount of data (in Bytes) written by the
+        vMachine.
+    -   metadata\_store\_hits: Amount of hits for metadata pages.
+    -   backend\_data\_read\_ps: Amount of data (in Bytes) read from the
+        Storage Backend averaged over the last time it was requested.
+        Zero in case no request was made in the last 10 seconds.
+    -   operations: Total amount of IO operations per second averaged
+        over the last time it was requested. Zero in case no request was
+        made in the last 10 seconds.
+    -   backend\_read\_operations\_ps: Amount of read operations from
+        the Storage Backend per second averaged over the last time it
+        was requested. Zero in case no request was made in the last 10
+        seconds.
+    -   data\_transferred\_ps: Amount of data transferred per second
+        between Storage Router and the Storage Backend averaged over the
+        last time it was requested. Zero in case no request was made in
+        the last 10 seconds.
+    -   write\_operations\_ps: Amount of write operations performed by
+        the vMachine per second averaged over the last time it was
+        requested. Zero in case no request was made in the last 10
+        seconds.
+    -   data\_transferred: Amount of data transferred per second between
+        Storage Router and the Storage Backend.
+    -   backend\_data\_read: Amount of data (in Bytes) writen to the
+        Storage Backend.
+    -   cache\_hits: Amount of cache hits.
+    -   backend\_write\_operations\_ps: Amount of write operations to
+        the Storage Backend averaged over the last time it was
+        requested. Zero in case no request was made in the last 10
+        seconds.
+    -   operations\_ps: Amount of IO operations averaged over the last
+        time it was requested. Zero in case no request was made in the
+        last 10 seconds.
+-   vpool\_guid: GUID of the vPool on which the vDisk is stored.
+-   vmachine\_guid: GUID of the vMachine to which the vDisk is attached.
+-   parent\_vdisk\_guid: GUID of the parent of the vDisk. Null if no
+    parent exists.
+-   child\_vdisks\_guids: List of child vDisk GUIDs.
+
+### Example data
+
+~~~~ {.sourceCode .python}
+{
+    "guid": "ba398bee-d9a0-4a80-9222-3220c313f63e",
+    "volume_id": "43ac680c-40c9-4024-915f-23bfa0b7f3a2",
+    "description": null,
+    "cinder_id": null,
+    "name": "Hard disk 1",
+    "parentsnapshot": null,
+    "order": 0,
+    "devicename": "template/template.vmdk",
+    "size": 42949672960,
+    "storagedriver_id": "local0050569647a1",
+    "snapshots": [
+        {
+            "timestamp": "1412150403",
+            "label": "",
+            "is_automatic": true,
+            "stored": 0,
+            "is_consistent": false,
+            "guid": "53b23161-7e7b-42b7-af01-df5540afde56"
+        }
+    ],
+    "storagerouter_guid": "a8743428-9bb8-478f-ac4e-366d273db96d",
+    "info": {
+        "failover_port": 0,
+        "parent_namespace": "",
+        "failover_mode": "OK_STANDALONE",
+        "stored": 0,
+        "vrouter_id": "local0050569647a1",
+        "object_type": "TEMPLATE",
+        "namespace": "43ac680c-40c9-4024-915f-23bfa0b7f3a2",
+        "halted": false,
+        "volume_size": 42949672960,
+        "parent_snapshot_id": "",
+        "lba_size": 512,
+        "parent_volume_id": "",
+        "cluster_multiplier": 8,
+        "volume_id": "43ac680c-40c9-4024-915f-23bfa0b7f3a2",
+        "footprint": 0,
+        "lba_count": 83886080,
+        "sco_multiplier": 1024,
+        "failover_ip": ""
+    },
+    "statistics": {
+        "operations": 0,
+        "data_written_ps": 0,
+        "data_read": 0,
+        "sco_cache_misses": 0,
+        "sco_cache_hits_ps": 0,
+        "sco_cache_hits": 0,
+        "write_operations": 0,
+        "cluster_cache_misses": 0,
+        "read_operations_ps": 0,
+        "sco_cache_misses_ps": 0,
+        "backend_write_operations": 0,
+        "backend_data_read": 0,
+        "cache_hits": 0,
+        "backend_write_operations_ps": 0,
+        "metadata_store_hits_ps": 0,
+        "metadata_store_misses": 0,
+        "backend_data_written": 0,
+        "data_read_ps": 0,
+        "read_operations": 0,
+        "cluster_cache_hits": 0,
+        "cluster_cache_misses_ps": 0,
+        "cluster_cache_hits_ps": 0,
+        "cache_hits_ps": 0,
+        "timestamp": 1412169400.884161,
+        "metadata_store_misses_ps": 0,
+        "backend_data_written_ps": 0,
+        "backend_read_operations": 0,
+        "data_written": 0,
+        "metadata_store_hits": 0,
+        "backend_data_read_ps": 0,
+        "operations_ps": 0,
+        "backend_read_operations_ps": 0,
+        "data_transferred_ps": 0,
+        "write_operations_ps": 0,
+        "data_transferred": 0
+    },
+    "vpool_guid": "e9146a46-2ca2-4f09-93f4-9101e0ffd439",
+    "vmachine_guid": "67328b8e-d2a8-4d3b-979d-f39362df9471",
+    "parent_vdisk_guid": null,
+    "child_vdisks_guids": [
+        "da1657cb-f42e-4678-85bf-d4d6eec4beae"
+    ]
+}
+~~~~
+
+### vDisk actions
+
+Main actions:
+
+-   List: GET
+-   Resource: GET
+
+WARNING: UNSUPPORTED DOC, TABLES NOT SUPPORT YET.
+
+### vMachines
+
+### vMachine object structure
+
+-   guid: GUID of the vMachine.
+-   hypervisorid: Id of the vMachines on the Hypervisor.
+-   description: Description of the vMachine.
+-   name: Name of the vMachine.
+-   status: Internal status of the vMachine. Possible values are OK,
+    NOK, CREATED, SYNC, SYNC\_NOK.
+-   is\_vtemplate: Boolean indicating whether this vMachine is a
+    vTemplate.
+-   devicename: The name of the container file (e.g. the VMX-file)
+    describing the vMachine.
+-   failover\_mode: Status of the Fail-Over Cache.
+-   storagerouters\_guids: A list of StorageRouters serving this
+    vMachine's vDisks.
+-   vpools\_guids: A list of vPools used by this vMachine's vDisks.
+-   snapshots: List of vMachine snapshots.
+-   hypervisor\_status: Status of the vMachine on the Hypervisor.
+-   statistics: Aggregated statistics from all this vMachine's vDisks.
+    See vDisk.statistics.
+-   stored\_data: Total size in Bytes of the current data and the
+    Snapshots without the overhead imposed by the Backend redundancy.
+-   pmachine\_guid: GUID of the Host running the vMachine.
+-   vpool\_guid: GUID of the vPool where the device is stored.
+-   vdisks\_guids: List of the vMachine's vDisks.
+
+### Example data
+
+~~~~ {.sourceCode .python}
+{
+    "guid": "86041df1-fa32-4377-97ed-e07cfc67d896",
+    "hypervisor_id": "1195",
+    "description": "",
+    "name": "test",
+    "status": "SYNC",
+    "is_vtemplate": false,
+    "devicename": "test/test.vmx",
+    "failover_mode": "OK_STANDALONE",
+    "storagerouters_guids": [
+        "a8743428-9bb8-478f-ac4e-366d273db96d"
+    ],
+    "vpools_guids": [
+        "e9146a46-2ca2-4f09-93f4-9101e0ffd439"
+    ],
+    "snapshots": [
+        {
+            "timestamp": "1412154003",
+            "snapshots": {
+                "da1657cb-f42e-4678-85bf-d4d6eec4beae": "6c6b2a49-7b4e-4fd1-954d-be8273a9711f"
+            },
+            "label": "",
+            "is_automatic": true,
+            "stored": 0,
+            "is_consistent": false
+        }
+    ],
+    "hypervisor_status": "HALTED",
+    "statistics": {
+        ...
+    },
+    "stored_data": 0,
+    "pmachine_guid": "64a60bb0-094a-4e6b-8e73-253a61fd63d3",
+    "vpool_guid": "e9146a46-2ca2-4f09-93f4-9101e0ffd439",
+    "vdisks_guids": [
+        "da1657cb-f42e-4678-85bf-d4d6eec4beae"
+    ]
+}
+~~~~
+
+### vMachine actions
+
+Main actions:
+
+-   List: GET
+-   Resource: GET, DELETE
+
+WARNING: UNSUPPORTED DOC, TABLES NOT SUPPORT YET.
+
+### vPools
+
+### vPool object structure
+
+-   guid: GUID of the vPool.
+-   name: Name of the vPool.
+-   login: Login/Username for the Storage Backend, if not LOCAL or
+    DISTRIBUTED.
+-   connection: Connection (IP, URL, Domainname, Zone, ...) for the
+    Storage Backend.
+-   size: Size of the vPool expressed in Bytes. Set to zero if not
+    applicable.
+-   metadata: Metadata of the vPool.
+    -   backend\_type: Type of the Storage Backend.
+    -   local\_connection\_path: Local path for the local data, if
+        applicable.
+-   description: Description of the vPool.
+-   type: Type of the Backend.
+-   statistics: Aggregated statistics from all this vPools's vDisks. See
+    vDisk.statistics.
+-   status: Status of the vPool.
+-   stored\_data: Total size in Bytes of the current data and the
+    Snapshots without the overhead imposed by the Backend redundancy.
+-   vmachines\_guids: List of vMachine GUIDs served by this vPool.
+-   vdisks\_guids: List of vDisk GUIDs served by this vPool.
+-   storagedrivers\_guids: List of StorageDriver GUIDs serving this
+    vPool.
+
+### Example data
+
+~~~~ {.sourceCode .python}
+{
+    "guid": "e9146a46-2ca2-4f09-93f4-9101e0ffd439",
+    "name": "local",
+    "login": null,
+    "connection": null,
+    "size": 51653570560,
+    "metadata": {
+        "backend_type": "LOCAL",
+        "local_connection_path": "/mnt/bfs/local"
+    },
+    "description": "LOCAL local",
+    "type": "LOCAL",
+    "statistics": {
+        "operations": 0,
+        "cluster_cache_misses_ps": 0,
+        "data_read": 0,
+        "sco_cache_misses": 0,
+        "sco_cache_hits_ps": 0,
+        "sco_cache_hits": 0,
+        "write_operations": 0,
+        "cluster_cache_misses": 0,
+        "read_operations_ps": 0,
+        "sco_cache_misses_ps": 0,
+        "backend_write_operations": 0,
+        "backend_data_read": 0,
+        "cache_hits": 0,
+        "backend_write_operations_ps": 0,
+        "metadata_store_hits_ps": 0,
+        "metadata_store_misses": 0,
+        "backend_data_written": 0,
+        "data_read_ps": 0,
+        "read_operations": 0,
+        "cluster_cache_hits": 0,
+        "data_written_ps": 0,
+        "cluster_cache_hits_ps": 0,
+        "cache_hits_ps": 0,
+        "timestamp": 1412169916.481471,
+        "metadata_store_misses_ps": 0,
+        "backend_data_written_ps": 0,
+        "backend_read_operations": 0,
+        "data_written": 0,
+        "metadata_store_hits": 0,
+        "backend_data_read_ps": 0,
+        "operations_ps": 0,
+        "backend_read_operations_ps": 0,
+        "data_transferred_ps": 0,
+        "write_operations_ps": 0,
+        "data_transferred": 0
+    },
+    "status": null,
+    "stored_data": 0,
+    "vmachines_guids": [
+        "67328b8e-d2a8-4d3b-979d-f39362df9471",
+        "86041df1-fa32-4377-97ed-e07cfc67d896"
+    ],
+    "vdisks_guids": [
+        "ba398bee-d9a0-4a80-9222-3220c313f63e",
+        "da1657cb-f42e-4678-85bf-d4d6eec4beae"
+    ],
+    "storagedrivers_guids": [
+        "8ceb873a-7b60-4a8f-b91f-c373ce65ea07"
+    ]
+}
+~~~~
+
+### vPool actions
+
+Main actions:
+
+-   List: GET
+-   Resource: GET
+
+WARNING: UNSUPPORTED DOC, TABLES NOT SUPPORT YET.
+
+### Tasks
+
+Tasks behave differently as they don't represent model objects but key
+components of the Celery workflow.
+
+### Tasks overview
+
+The overview of all active, scheduled, reserved and revoked Tasks can be
+found at the url [https://:ip/api/tasks/](https://:ip/api/tasks/). The
+result of this call is an object containing a list of Celery task GUIDs
+ordered per type, per worker. Example:
+
+~~~~ {.sourceCode .python}
+{
+    "active": {
+        "celery@ovs131": []
+    },
+    "scheduled": {
+        "celery@ovs131": []
+    },
+    "reserved": {
+        "celery@ovs131": []
+    },
+    "revoked": {
+        "celery@ovs131": [
+            "18143e2f-4fca-4702-b367-1286c892ff83",
+            "c747b0c5-1209-429c-9b57-dfcf7eb7e2cf"
+        ]
+    }
+}
+~~~~
+
+To see the details of a Task, paste the guid to the end of the Tasks
+overview url:
+[https://:ip/api/tasks/:guid](https://:ip/api/tasks/:guid). The result
+will be an object with the data of the Task.
+
+~~~~ {.sourceCode .python}
+{
+    "status": "PENDING",
+    "successful": false,
+    "failed": false,
+    "result": null,
+    "ready": false,
+    "id": "bd6a5c69-6817-4d6c-b4de-a6e7b47f4f21"
+}
+~~~~
+
+For each Task following info is provided:
+
+-   status: Status of the Task.
+-   successful: Boolean indicating if the Task was executed successful.
+-   failed: Boolean indicating if the Task failed.
+-   result: Result of the Task.
+-   ready: Boolean indicating if the Task is finished.
+-   id": Celery id of the Task.
+
+### API examples
+
+In the below examples we will retrieve the Storage Routers in an Open
+vStorage Cluster.
+
+### Command line
+
+Make sure to escape your Client Secret if necessary (adding backslashes
+before e.g. semi colons, at signs, dashes, ..)
+
+~~~~ {.sourceCode .python}
+IP=10.100.169.100
+CLIENTSECRET=\@GXgYvjthI6P2VP1\{\|XV{\@\@qA\'\!ti\"Mivxrs\-IP+gVD+~K\?wKl+HwKN\/5eaasqq\;
+CLIENTID=8f3ceef2-8fe2-4c89-b867-b52608828bb6
+TOKEN=`curl -X POST -u $CLIENTID:$CLIENTSECRET -d "grant_type=client_credentials" -s -k https://$IP/api/oauth2/token/ | python -c 'import json,sys;d=json.load(sys.stdin);print d["access_token"]'`
+curl -X GET -H "Accept: application/json; version=1" -H "Authorization: Bearer $TOKEN" -k https://$IP/api/storagerouters/
+~~~~
+
+Result:
+
+~~~~ {.sourceCode .python}
+["122bae9d-4321-475c-a2bf-d39a3126ffbe"]
+~~~~
+
+### Python
+
+~~~~ {.sourceCode .python}
+#!/usr/bin/python
+
+import sys
+import urllib2
+import urllib
+import json
+import base64
+
+ip = '10.100.169.100'
+client_id = '8f3ceef2-8fe2-4c89-b867-b52608828bb6'
+client_secret = '@GXgYvjthI6P2VP1{|XV{@@qA\'!ti"Mivxrs-IP+gVD+~K?wKl+HwKN/5eaasqq;'
+
+headers = {'Accept': 'application/json'}
+auth_url = 'https://{0}/api/oauth2/token/'.format(ip)
+base_url = 'https://{0}/api/'.format(ip)
+
+headers['Authorization'] = 'basic {0}'.format(base64.encodestring('{0}:{1}'.format(client_id, client_secret)).strip())
+request = urllib2.Request(auth_url, data=urllib.urlencode({'grant_type': 'client_credentials'}), headers=headers)
+response = urllib2.urlopen(request).read()
+
+token = json.loads(response)['access_token']
+
+headers['Authorization'] = 'Bearer {0}'.format(token)
+headers['Accept'] = 'application/json; version=*'
+
+request = urllib2.Request(base_url + 'storagerouters/', None, headers=headers)
+response = urllib2.urlopen(request).read()
+
+data = json.loads(response)
+
+print json.dumps(data, sort_keys=True, indent=4)
+~~~~
+
+Result:
+
+~~~~ {.sourceCode .python}
+[
+    "122bae9d-4321-475c-a2bf-d39a3126ffbe"
+]
+~~~~

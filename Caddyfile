@@ -1,0 +1,17 @@
+http://www.openvstorage.org, http://openvstorage.org {
+redir https://www.openvstorage.org
+}
+
+https://www.openvstorage.org {
+tls ../certs/ovs.org.crt.pem ../certs/ovs.org.key.pem
+gzip
+    root www.openvstorage.org/site
+
+    git {
+        repo git@github.com:openvstorage/ovs-org.git
+        interval 300
+        key ../keys/id_rsa
+        path ../..
+        then hugo -s www.openvstorage.org
+    }
+}

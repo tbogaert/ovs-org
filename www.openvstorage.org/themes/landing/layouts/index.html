@@ -1,0 +1,22 @@
+<div class="home">
+{{ partial "head.html" . }}
+{{ partial "header.html" . }}
+<!-- {{ partial "home_page/intro_box.html" . }} -->
+<!-- {{ partial "page_content.html" . }} -->
+{{ partial "home_page/home_textbox.html" . }}
+<div class="container">
+	<div class="row medium-boxes">
+		<div class="intro-video col-md-12">
+			{{ partial "home_page/intro_video.html" . }}
+		</div>
+		<div class="architecture-box col-md-12">
+			<hr />
+			{{ partial "home_page/architecture_box.html" . }}
+		</div>
+		<div class="row features-box">
+			{{ partial "home_page/features_box.html" . }}
+		</div>
+	</div>
+</div>
+{{ partial "home_page/footer.html" . }}
+</div>

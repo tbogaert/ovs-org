@@ -1,0 +1,14 @@
+{{ range $element :=  .Data.Pages }}
+	{{ if eq .Section "home" }}
+		{{ if eq .Title "home_textbox" }}
+			<div class="container">
+				<div class="row">
+					<div class="home-textbox">
+						{{ .Content }}
+					</div>
+					<hr />
+				</div>
+			</div>
+		{{ end }}
+	{{ end }}
+{{ end }}
