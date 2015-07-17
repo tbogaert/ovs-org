@@ -73,12 +73,6 @@ start ovs-volumedriver_<name of the vPool>
 Executing the above commands on a running vPool will delete all
 vMachines on that vPool!
 
-### Limited performance
-
-There is a limit of maximum 75 MiB/s as write performance per Storage
-Router. The performance bottleneck is caused by the NFS-Fuse combination
-used in the Open vStorage software.
-
 ### -flat.vmdk files have metadata timestamps set to 0
 
 The metadata timestamps (ctime (creation time), atime (access time) and
@@ -191,6 +185,13 @@ timeouts.
     with the same vPool name. When deleting the vPool on one
     environment, the other vPools, on the other environments, will
     become unavailable!
+
+### Removing a vPool
+
+-   Removing a vPool only works in case all Storage Routers are online. You will be able to start the remove action in the GUI but the will fail.
+
+
+
 
 ### Re-adding a vPool on OpenStack Cinder fails in case the manual changes were not undone.
 
