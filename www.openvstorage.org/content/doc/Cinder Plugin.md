@@ -19,6 +19,9 @@ In case you want to undo the changes made by the installation  of the Cinder Plu
     sure OpenStack is installed first. 
 -   In the Administration section, select *Hypervisor Mgmt.*. Click *Add new Center* and complete the form. Next indicate at the bottom which Nova nodes you want to be managed by the OpenStack Controller Node. Do not create a vPool before you have registered the Hypervisor Management Center and added the nodes.
 -   Create a vPool and add the vPool to all nodes that run Cinder. In the documentation we  will use the name VPOOL1 and VPOOL2 as an example.
+-   
+#### Changes required to the controller
+- Update the maximal amount of MySQL connections in /etc/mysql/my.cnf to 1000 and restart MySQL.
 
 #### Changes required to all Nova nodes
 
