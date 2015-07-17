@@ -255,6 +255,9 @@ which allows it to be used on maximum 4 Storage Routers and in total 16
 vDisk is considered to be a namespace. For example in a single vPool
 environment, you will be able to create 49 vDisks.
 
+#### Updates
+Under updates you can see if there are updates available for the different components of Open vStorage. Click the button to update the different components.
+
 #### API
 
 Links to the API of Open vStorage. You can find more info
