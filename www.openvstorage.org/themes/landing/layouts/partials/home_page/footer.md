@@ -1,4 +1,4 @@
-Copyright &copy; OpenvStorage All Rights Reserved
+Copyright &copy; OpenvStorage All Rights Reserved.
 
 <script type="text/javascript">
 	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
