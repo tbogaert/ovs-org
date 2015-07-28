@@ -192,7 +192,7 @@ timeouts.
 
 ### Re-adding a vPool on OpenStack Cinder fails for Juno and Kilo.
 
-Due to a bug in Cinder it is not possible to add a vPool with the name of a vPool which was previously deleted. The issue only occurs on Juno and Kilo but not on Liberty. 
+Due to a [bug](https://bugs.launchpad.net/cinder/+bug/1478929) in Cinder it is not possible to add a vPool with the name of a vPool which was previously deleted. The issue only occurs on Juno and Kilo but not on Liberty. 
 
 
 
