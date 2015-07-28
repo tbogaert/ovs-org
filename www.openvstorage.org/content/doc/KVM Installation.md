@@ -330,18 +330,10 @@ add more nodes to the cluster. This requires [KVM to be
 installed]]( {{< relref "KVM Installation.md" >}}#installkvm ) and [configured]( {{< relref "KVM Installation.md" >}}#configureubuntu ) and the [Open
 vStorage software must be installed]( {{< relref "KVM Installation.md" >}}#installovs )  on these nodes.
 
-From the first KVM node open an interactive ipython session from the
-command line by typing :
+Execute in the KVM shell of every node (concurrent installations of multiple nodes isn't supported):
 
 ~~~~ {.sourceCode .python}
-ovs
-~~~~
-
--   In the ipython session execute
-
-~~~~ {.sourceCode .python}
-from ovs.lib.setup import SetupController
-SetupController.setup_node('<Public IP of the other KVM Node>')
+ovs setup
 ~~~~
 
 The initialization script will ask a couple of questions:
