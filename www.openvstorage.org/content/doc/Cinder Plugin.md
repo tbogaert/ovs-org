@@ -14,11 +14,11 @@ In case you want to undo the changes made by the installation  of the Cinder Plu
 
 #### Prerequisites
 
--   Install OpenStack Juno/Kilo on all nodes
+-   Install OpenStack Juno/Kilo/Liberty on all nodes
 -   Install Open vStorage on all [KVM nodes](/doc/KVM Installation). Make
     sure OpenStack is installed first. 
 -   In the Administration section, select *Hypervisor Mgmt.*. Click *Add new Center* and complete the form. Next indicate at the bottom which Nova nodes you want to be managed by the OpenStack Controller Node. Do not create a vPool before you have registered the Hypervisor Management Center and added the nodes.
--   Create a vPool and add the vPool to all nodes that run Cinder. In the documentation we  will use the name VPOOL1 and VPOOL2 as an example.
+-   Create a vPool and add the vPool to all nodes that run Cinder. In the documentation we  will use the name VPOOL1 and VPOOL2 as an example. In case you don't extend the vPool on all nodes, use storage_availability_zones to make sure the VM gets created on a Nova node which has the vPool configured (Juno, Kilo).
 -   
 #### Changes required to the controller
 - Update the maximal amount of MySQL connections in /etc/mysql/my.cnf to 1000 and restart MySQL.
