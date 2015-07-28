@@ -8,8 +8,8 @@ title = "Known Issues"
 The Known Issues lists the most common and general issues with the Open
 vStorage software which are known but not yet addressed in the current
 release. As they are known, there is no need to [create a
-bug](File%20a%20Bug) for these issues in the [Jira bug
-tracker](https://bitbucket.org/openvstorage/openvstorage/issues?status=new&status=open).
+bug](File%20a%20Bug) for these issues in the [GitHub bug
+tracker](https://github.com/openvstorage/openvstorage/issues).
 
 Feel free to solve any of these issues. You can find more information on
 how to contribute to Open vStorage [here](Contribute).
