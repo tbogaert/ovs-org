@@ -190,6 +190,9 @@ timeouts.
 
 -   Removing a vPool only works in case all Storage Routers are online. You will be able to start the remove action in the GUI but the will fail.
 
+### Re-adding a vPool on OpenStack Cinder fails for Juno and Kilo.
+
+Due to a bug in Cinder it is not possible to add a vPool with the name of a vPool which was previously deleted. The issue only occurs on Juno and Kilo but not on Liberty. 
 
 
 
