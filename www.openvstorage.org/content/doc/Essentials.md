@@ -48,7 +48,7 @@ Performance might be severely impacted when storing large non-volume
 files on the vPool.
 
 <a name="VMware" class="internal-ref"></a>
-#### VMware specific 
+#### VMware
 
 <a name="VMware unsupported" class="internal-ref"></a>
 #### Unsupported VMware functionality
