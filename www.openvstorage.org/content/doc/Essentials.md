@@ -37,6 +37,7 @@ advised to have a 2 Node setup as it can lead to split brain situations.
 
 -   VMware ESXi 5.1 P01 (experimental, single vPool only)
 -   VMware ESXi 5.5 (experimental, single vPool only)
+-   VMWare ESXi 6 (experimental, single vPool only)
 -   KVM (raw disks only)
 
 <a name="ISO files" class="internal-ref"></a>
@@ -121,6 +122,7 @@ of the vPool\>.json
 <a name="Supported Storage Backends" class="internal-ref"></a>
 ### Supported Storage Backends
 
+-   Open vStorage Backend (ALBA)
 -   (Distributed) Filesystems
 -   Amazon S3 compatible object stores:
     -   The Storage Backend must support both object and bucket methods.
