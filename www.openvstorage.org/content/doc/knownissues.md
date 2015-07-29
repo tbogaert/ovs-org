@@ -30,6 +30,7 @@ Login via ssh to the ESXi hypervisor:
 
 ~~~~ {.sourceCode .python}
 /etc/init.d/hostd restart
+
 /etc/init.d/vpxa restart
 ~~~~
 
