@@ -47,8 +47,20 @@ Currently it is strongly advised not to store ISO files on the vPool.
 Performance might be severely impacted when storing large non-volume
 files on the vPool.
 
+<a name="VMware" class="internal-ref"></a>
+#### VMware specific 
+
+<a name="VMware unsupported" class="internal-ref"></a>
+#### Unsupported VMware functionality
+Currently not all functionality as offered by the VMware hypervisor is supported. Following features are not supported:
+
+-   Snapshots taken through the VMware interface
+-   Distributed Power Management
+-   Storage Replication Adapter
+-   VMware storage policy
+
 <a name="Swap files" class="internal-ref"></a>
-### Swap files
+#### Swap files
 
 ESXi creates by the default the vMachine memory swap file within the
 vMachine directory \<vPool Datastore\>/\<VM Name\>. This means this big
