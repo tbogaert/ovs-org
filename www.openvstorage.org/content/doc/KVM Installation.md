@@ -1,7 +1,6 @@
 +++
 #Don't remove title!
 title = "KVM Installation"
-tag = "howto"
 +++
 
 ### Introduction
