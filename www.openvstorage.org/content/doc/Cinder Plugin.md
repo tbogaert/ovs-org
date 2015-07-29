@@ -83,20 +83,6 @@ stop libvirt-bin && start libvirt-bin || start libvirt-bin
 ps -ef | grep libvirtd
 ~~~~
 
-#### Update the instances\_path
-
--   Execute the following on all the Nova nodes
-
-~~~~ {.sourceCode .python}
-# replace with correct vPool name for your environment
-export VPOOLNAME=<VPOOLNAME1>
-
-sed -i '/instances_path =.*/c\instances_path = /mnt/'${VPOOLNAME}'/instances' /etc/nova/nova.conf
-sudo mkdir -p /mnt/${VPOOLNAME}/instances
-~~~~
-
--   Restart the Nova services
-
 #### Configure passwordless authentication for stack user
 
 -   Passwordless authentication is required for the stack user to allow
