@@ -16,9 +16,10 @@ Please mail a signed copy of the agreement to agreement@openvstorage.com or fax 
 If you are making a contribution that is not your work (for example, a patch or library written by someone else), please contact us at agreement@openvstorage.com.
 
 ### Get the Source Code
-Ok, so you want to contribute code to the Open vStorage Project? in that case you need to fork the Open vStorage project on Bitbucket.
+Ok, so you want to contribute code to the Open vStorage Project? in that case you need to fork the Open vStorage project on GitHub.
 
 To fork the Open vStorage repository, do the following:
+
 * Go to [https://github.com/openvstorage](https://github.com/openvstorage)
 * Click the Fork button. 
 * 
@@ -28,6 +29,7 @@ More info on forking can be found at the [GitHub website](https://help.github.co
 Open vStorage is an open source project so we welcome all contributions but sending a maintainer a patch, or a pull request that consists of your “fix” mixed with a dozen renames, refactoring changes, variable renames, method renames, file splitting, layout changing code is not really a contribution, it is home work. If you want to commit code, send a pull request to incorporate your code in the Open vStorage project. Before creating a pull request, you should compare your outgoing requests to the destination repository. This tells you how much the destination repository changed while you worked on your fork or branch. You do this by comparing incoming changes.It is good practice to make sure that there are no incoming changes before you make your pull request.
 
 To create a pull request on GitHub, do the following:
+
 * Navigate to the repository with the changes.
 * Press the Pull Request button.
 
