@@ -67,7 +67,7 @@ Forum](https://groups.google.com/forum/#!forum/open-vstorage). *Only
 sudo apt-get install kvm libvirt0 python-libvirt virtinst
 ~~~~
 
-Repeat the above steps for all ESXi Nodes in the Open vStorage Cluster.
+Repeat the above steps for all KVM Nodes in the Open vStorage Cluster.
 
 
  <a name="configureubuntu" class="internal-ref"></a>
@@ -84,6 +84,12 @@ passwd
 -   Make sure that PermitRootLogin is set to yes (instead of
     without-password) in /etc/ssh/sshd\_config and restart ssh by typing
     *restart ssh*.
+-   Decrease the swapiness of the OS:
+
+~~~~ {.sourceCode .python}
+echo 1 > /proc/sys/vm/swappiness
+~~~~
+
 -   Configure an NTP Server and install ntpd:
 
 ~~~~ {.sourceCode .python}
@@ -109,6 +115,9 @@ server 3.ubuntu.pool.ntp.org
 ~~~~ {.sourceCode .python}
 sudo /etc/init.d/ntp reload
 ~~~~
+
+
+
 
 -   You can now go to the [Install the Open vStorage
     software]( {{< relref "KVM Installation.md" >}}#installovs ) section.
