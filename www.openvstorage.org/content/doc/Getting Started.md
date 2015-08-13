@@ -60,14 +60,10 @@ ovs setup
     vStorage as hyperconverged solution will require you to [get a free
     license](http://license.openvstorage.com). Next, create your first
     vPool in the vPools section.
--   From the first KVM node open an interactive ipython session from the
-    command line and execute for all other KVM nodes:
+-   To add more nodes execute in the KVM shell of every node (concurrent installations of multiple nodes isn't supported):
 
 ~~~~ {.sourceCode .python}
-ovs
-# In the ipython session
-from ovs.lib.setup import SetupController
-SetupController.setup_node('<Public IP of other the KVM Node>')
+ovs setup
 ~~~~
 
 -   Extend the vPool across the newly added KVM nodes in the Open
@@ -130,14 +126,10 @@ ovs setup
     give the Datastore the name of the vPool.
 -   Create a new Virtual Machine in the vSphere GUI with vDisks on the
     vPool.
--   From the first Storage Router open an interactive ipython session
-    from the command line and execute for all other Storage Routers:
+-   To add more Storage Routers, execute in the shell of every Storage Router (concurrent installations of multiple nodes isn't supported):
 
 ~~~~ {.sourceCode .python}
-ovs
-# In the ipython session
-from ovs.lib.setup import SetupController
-SetupController.setup_node('<Public IP of other Storage Router>')
+ovs setup
 ~~~~
 
 -   Extend the vPool across the newly created Storage Routers in the

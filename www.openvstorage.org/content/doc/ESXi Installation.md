@@ -624,18 +624,10 @@ Hosts. This requires an [OS to be installed]({{< relref "ESXi Installation.md" >
 [configured]( {{< relref "ESXi Installation.md" >}}#configureubuntu) and the [Open vStorage software must be
 installed]({{< relref "ESXi Installation.md" >}}#installopenvstorage) on these Storage Routers.
 
-From the first Storage Router open an interactive ipython session from
-the command line by typing :
+Execute in the shell of every Storage Router (concurrent installations of multiple nodes isn't supported):
 
 ~~~~ {.sourceCode .python}
-ovs
-~~~~
-
--   In the ipython session execute
-
-~~~~ {.sourceCode .python}
-from ovs.lib.setup import SetupController
-SetupController.setup_node('<Public IP of other Storage Router>')
+ovs setup
 ~~~~
 
 The initialization script will ask a couple of questions:

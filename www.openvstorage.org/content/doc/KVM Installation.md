@@ -1,7 +1,6 @@
 +++
 #Don't remove title!
 title = "KVM Installation"
-tag = "howto"
 +++
 
 ### Introduction
@@ -68,7 +67,7 @@ Forum](https://groups.google.com/forum/#!forum/open-vstorage). *Only
 sudo apt-get install kvm libvirt0 python-libvirt virtinst
 ~~~~
 
-Repeat the above steps for all ESXi Nodes in the Open vStorage Cluster.
+Repeat the above steps for all KVM Nodes in the Open vStorage Cluster.
 
 
  <a name="configureubuntu" class="internal-ref"></a>
@@ -85,6 +84,12 @@ passwd
 -   Make sure that PermitRootLogin is set to yes (instead of
     without-password) in /etc/ssh/sshd\_config and restart ssh by typing
     *restart ssh*.
+-   Decrease the swapiness of the OS:
+
+~~~~ {.sourceCode .python}
+echo 1 > /proc/sys/vm/swappiness
+~~~~
+
 -   Configure an NTP Server and install ntpd:
 
 ~~~~ {.sourceCode .python}
@@ -110,6 +115,9 @@ server 3.ubuntu.pool.ntp.org
 ~~~~ {.sourceCode .python}
 sudo /etc/init.d/ntp reload
 ~~~~
+
+
+
 
 -   You can now go to the [Install the Open vStorage
     software]( {{< relref "KVM Installation.md" >}}#installovs ) section.
@@ -330,18 +338,10 @@ add more nodes to the cluster. This requires [KVM to be
 installed]]( {{< relref "KVM Installation.md" >}}#installkvm ) and [configured]( {{< relref "KVM Installation.md" >}}#configureubuntu ) and the [Open
 vStorage software must be installed]( {{< relref "KVM Installation.md" >}}#installovs )  on these nodes.
 
-From the first KVM node open an interactive ipython session from the
-command line by typing :
+Execute in the KVM shell of every node (concurrent installations of multiple nodes isn't supported):
 
 ~~~~ {.sourceCode .python}
-ovs
-~~~~
-
--   In the ipython session execute
-
-~~~~ {.sourceCode .python}
-from ovs.lib.setup import SetupController
-SetupController.setup_node('<Public IP of the other KVM Node>')
+ovs setup
 ~~~~
 
 The initialization script will ask a couple of questions:

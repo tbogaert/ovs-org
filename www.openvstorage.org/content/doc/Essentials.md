@@ -25,6 +25,7 @@ advised to have a 2 Node setup as it can lead to split brain situations.
 -   Minimal requirements
     -   ESXi or KVM compatible hardware with 1 SATA disk for the OS and a disk for the cache (min. 100GB). In case you want to install Open vStorage Hyper-converged, at least 3 additional SATA disks are required for the Open vStorage Backend.
     -   Gigabit ethernet
+    -   In case you want to use the Open vStorage Backend, the switch must support IGMP (igmp snooping and igmp snooping querying must be enabled).
 -   Advised configuration
     -   ESXi or KVM compatible hardware with at least 2 SATA disks (OS). 
     -   An enterprise SSD or PCI Flash card (min. 100GB) to hold the
@@ -36,6 +37,7 @@ advised to have a 2 Node setup as it can lead to split brain situations.
 
 -   VMware ESXi 5.1 P01 (experimental, single vPool only)
 -   VMware ESXi 5.5 (experimental, single vPool only)
+-   VMWare ESXi 6 (experimental, single vPool only)
 -   KVM (raw disks only)
 
 <a name="ISO files" class="internal-ref"></a>
@@ -45,8 +47,20 @@ Currently it is strongly advised not to store ISO files on the vPool.
 Performance might be severely impacted when storing large non-volume
 files on the vPool.
 
+<a name="VMware" class="internal-ref"></a>
+#### VMware
+
+<a name="VMware unsupported" class="internal-ref"></a>
+#### Unsupported VMware functionality
+Currently not all functionality as offered by the VMware hypervisor is supported. Following features are not supported:
+
+-   Snapshots taken through the VMware interface
+-   Distributed Power Management
+-   Storage Replication Adapter
+-   VMware storage policy
+
 <a name="Swap files" class="internal-ref"></a>
-### Swap files
+#### Swap files
 
 ESXi creates by the default the vMachine memory swap file within the
 vMachine directory \<vPool Datastore\>/\<VM Name\>. This means this big
@@ -120,6 +134,7 @@ of the vPool\>.json
 <a name="Supported Storage Backends" class="internal-ref"></a>
 ### Supported Storage Backends
 
+-   Open vStorage Backend (ALBA)
 -   (Distributed) Filesystems
 -   Amazon S3 compatible object stores:
     -   The Storage Backend must support both object and bucket methods.
