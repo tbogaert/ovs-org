@@ -88,6 +88,7 @@ passwd
 
 ~~~~ {.sourceCode .python}
 echo 1 > /proc/sys/vm/swappiness
+echo "vm.swappiness=1" >> /etc/sysctl.conf
 ~~~~
 
 -   Configure an NTP Server and install ntpd:
