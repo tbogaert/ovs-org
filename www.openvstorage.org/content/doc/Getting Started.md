@@ -37,6 +37,18 @@ sudo apt-get install kvm libvirt0 python-libvirt virtinst
 sudo su -
 passwd
 ~~~~
+-   Decrease the swapiness of the OS:
+
+~~~~ {.sourceCode .python}
+echo 1 > /proc/sys/vm/swappiness
+echo "vm.swappiness=1" >> /etc/sysctl.conf
+~~~~
+-   Update the VM dirty_background_bytes:
+
+~~~~ {.sourceCode .python}
+echo "134217728" > /proc/sys/vm/dirty_background_bytes
+echo "vm.dirty_background_bytes = 134217728" >> /etc/sysctl.conf
+~~~~
 
 -   Install the Open vStorage software (Open vStorage core and backend
     packages) on all KVM nodes:
@@ -58,18 +70,16 @@ ovs setup
     case you want to run Open vStorage hyperconverged, create an Open
     vStorage Backend in the Backend section. Note that running Open
     vStorage as hyperconverged solution will require you to [get a free
-    license](http://license.openvstorage.com). Next, create your first
-    vPool in the vPools section.
+    license](http://license.openvstorage.com).
 -   To add more nodes execute in the KVM shell of every node (concurrent installations of multiple nodes isn't supported):
 
 ~~~~ {.sourceCode .python}
 ovs setup
 ~~~~
 
--   Extend the vPool across the newly added KVM nodes in the Open
-    vStorage GUI.
 -   If you installed OpenStack, configure the [Cinder
     Plugin](/doc/Cinder%20Plugin).
+-   Next, create your first vPool in the vPools section.
 -   Feel free to [contribute](/doc/Contribute) to the Open vStorage code or
     [get help from the Open vStorage
     community](https://groups.google.com/forum/#!forum/open-vstorage).

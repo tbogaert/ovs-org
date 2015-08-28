@@ -351,6 +351,19 @@ passwd
 -   Make sure that PermitRootLogin is set to yes (instead of
     without-password) in /etc/ssh/sshd\_config and restart ssh by typing
     *restart ssh*.
+-   Decrease the swapiness of the OS:
+
+~~~~ {.sourceCode .python}
+echo 1 > /proc/sys/vm/swappiness
+echo "vm.swappiness=1" >> /etc/sysctl.conf
+~~~~
+-   Update the VM dirty_background_bytes:
+
+~~~~ {.sourceCode .python}
+echo "134217728" > /proc/sys/vm/dirty_background_bytes
+echo "vm.dirty_background_bytes = 134217728" >> /etc/sysctl.conf
+~~~~
+
 -   Configure an NTP Server and install ntpd:
 
 ~~~~ {.sourceCode .python}
