@@ -1,6 +1,6 @@
 +++
 #Don't remove title!
-title = "ESXi Installation"
+title = "ESXiInstallation"
 +++
 
 ### Introduction

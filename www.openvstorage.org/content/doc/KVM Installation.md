@@ -88,6 +88,13 @@ passwd
 
 ~~~~ {.sourceCode .python}
 echo 1 > /proc/sys/vm/swappiness
+echo "vm.swappiness=1" >> /etc/sysctl.conf
+~~~~
+-   Update the VM dirty_background_bytes:
+
+~~~~ {.sourceCode .python}
+echo "134217728" > /proc/sys/vm/dirty_background_bytes
+echo "vm.dirty_background_bytes = 134217728" >> /etc/sysctl.conf
 ~~~~
 
 -   Configure an NTP Server and install ntpd:
@@ -133,7 +140,7 @@ Execute the next steps in the shell of all KVM Nodes:
 -   Add the repo to your sources
 
 ~~~~ {.sourceCode .python}
-echo "deb http://apt-ovs.cloudfounders.com beta/" > /etc/apt/sources.list.d/ovsaptrepo.list
+echo "deb http://apt.openvstorage.org aurora/" > /etc/apt/sources.list.d/ovsaptrepo.list
 ~~~~
 
 There are 2 options to install Open vStorage. The first option is to
