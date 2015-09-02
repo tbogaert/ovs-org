@@ -9,7 +9,7 @@ supported hypervisor.
 
 ### Installation Guides
 
--   [ESXi Installation](/doc/ESXi%20Installation)
+-   [ESXi Installation](/doc/ESXi-Installation)
 -   [KVM Installation](/doc/KVM%20Installation)
 
 ### Use Open vStorage as block storage on OpenStack

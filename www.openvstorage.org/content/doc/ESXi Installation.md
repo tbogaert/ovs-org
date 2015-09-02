@@ -25,12 +25,10 @@ Forum](https://groups.google.com/forum/#!forum/open-vstorage).
     PCI-flash card is required.
 -   [Ubuntu server 14.04.2 64 bit
     ISO](http://releases.ubuntu.com/14.04.2/ubuntu-14.04.2-server-amd64.iso).
--   A Bitbucket account. You can create a [Bitbucket account for
-    free](https://bitbucket.org/).
 -   The
-    [deployOvs.py](http://download.openvstorage.com/index.php?file=deployOvs)
+    [deployOvs.py](https://github.com/openvstorage/openvstorage/blob/master/scripts/deployment/deployOvs.py)
     script (browse to openvstorage / scripts / deployment /) from
-    [Bitbucket](https://bitbucket.org/openvstorage/openvstorage/).
+    [GitHub](https://github.com/openvstorage/openvstorage/).
 -   In case you want to install Open vStorage Hyper-converged, at least 3 additional SATA disks are required for the Open vStorage Backend.
 -   Per GB read cache on SSD/PCI-e flash, you will need to reserve 10 MB RAM in the Open vStorage Storage Router.
 
@@ -50,7 +48,7 @@ Forum](https://groups.google.com/forum/#!forum/open-vstorage).
 -   The [Ubuntu server 14.04.2 64 bit
     ISO](http://releases.ubuntu.com/14.04.2/ubuntu-14.04.2-server-amd64.iso)
     and the
-    [deployOvs.py](http://download.openvstorage.com/index.php?file=deployOvs)
+    [deployOvs.py](https://github.com/openvstorage/openvstorage/blob/master/scripts/deployment/deployOvs.py)
     script are uploaded to the ESXi Datastore of each Host.
 -   VMware vSphere is required for High Availability (HA).
 
@@ -140,7 +138,7 @@ features of VMware. Please refer to the VMware best practices
 
 On each ESXi Host create an Open vStorage Storage Router. You can use
 the [DeployOvs.py]({{< relref "ESXi Installation.md" >}}#usedeployscript) script (download it
-[here](http://download.openvstorage.com/index.php?file=deployOvs)) to
+[here](https://github.com/openvstorage/openvstorage/blob/master/scripts/deployment/deployOvs.py)) to
 create the Virtual Storage Router or you can create the Open vStorage VM
 [manually]({{< relref "ESXi Installation.md" >}}#rooter-manually).
 
