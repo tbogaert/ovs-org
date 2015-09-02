@@ -9,7 +9,7 @@ title = "Getting started"
 This section provides a quick getting started guide on how to setup Open
 vStorage on your servers. A detailed guide on how to setup Open vStorage
 can be found [here](/doc/Installation). You can select between the
-[VMware](/doc/ESXi%20Installation) and [KVM](/doc/KVM%20Installation) installation
+[VMware](/doc/ESXi-Installation) and [KVM](/doc/KVM%20Installation) installation
 instructions. Once the installation is complete you can start creating
 vMachines on top of Open vStorage.
 
@@ -100,7 +100,7 @@ The quick install guide for ESXi:
     script.
 -   On all ESXi nodes, upload the Ubuntu 14.04.2 Server ISO and the
     [deployOvs.py
-    script](http://download.openvstorage.com/index.php?file=deployOvs)
+    script](https://github.com/openvstorage/openvstorage/blob/master/scripts/deployment/deployOvs.py)
     to the ESXi Datastore and execute "./deployOvs.py --image
     /vmfs/volumes/datastore1/ubuntu-14.04.2-server-amd64.iso".
 -   Select a Public Network and a Storage Network and follow the
