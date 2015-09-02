@@ -18,12 +18,12 @@ which are registered in the environment.
 For each Backend following details are available:
 
 -   Name: friendly name of the Backend.
--   Type: Type of the Backend. Currently the only supported type is Open
+-   Type: Type of the Backend. Currently the only supported type as Backend is Open
     vStorage Backend.
 -   Status: Status of the Backend. This is indicated by a color.
     -   Green: Everything is ok.
     -   Orange: Issues have been reported which require your attention.
-    -   Red: Possible dataloss.
+    -   Red: Possible data loss.
 
 ### Backend Actions
 
