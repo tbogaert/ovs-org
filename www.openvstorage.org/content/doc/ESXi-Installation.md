@@ -422,7 +422,7 @@ Routers. Execute the next steps in the shell of all Storage Routers:
 echo "deb http://apt.openvstorage.org aurora/" > /etc/apt/sources.list.d/ovsaptrepo.list
 ~~~~
 
-There are 2 options to install Open vstorage. The first option is to
+There are 2 options to install Open vStorage. The first option is to
 install Open vStorage and the Open vStorage Backend packages. When you
 install the Open vStorage Backend packages you can use the disks inside
 the Nova host as Tier 2 storage (hyperconverged). You will need a
@@ -475,10 +475,6 @@ The initialization script will ask a couple of questions:
         will be possible). This should go to SATA. The more the better
         in this case as this is where VM data will end up. In case you
         use an object store this partition isn't used.
-    -   /mnt/db: mountpoint for the databases.This should be on SSD and
-        needs to be selected during installation.
-    -   /mnt/md: mountpoint for the volume metadata. This should be on
-        SSD.
     -   /mnt/cachex : mountpoints for the different caches (where X goes
         from 1 to as many SSDs in the server). This should be on SSD.
 -   Some examples of the default partition layout:
@@ -488,13 +484,6 @@ The initialization script will ask a couple of questions:
     -   In case you have 1 additional SATA disk, we will use 20% for
         /var/tmp and the rest for the local backend (/mnt/bfs). In case
         you have 2 SATA disks we will assign each to a separate SATA.
-    -   In case you have a single SSD, /mnt/db (25%), /mnt/md (25%) and
-        the cache (50%) will be created on this SSD.
-    -   In case you have 2 or more SSDs Open vStorage will put the
-        databases (/mnt/db - 25%) on the first SSD and the metadata
-        (/mnt/md - 25%) on the second SSD. The rest of these SSDs (75%)
-        will be used to create caches. SSD 3 and up will be used
-        completely to create cache partitions.
 -   Select the Public IP address of the Storage Router.
 -   Select VMware as hypervisor. In case KVM is used as hypervisor, use
     the [KVM install documentation](/doc/KVM Installation).
@@ -529,7 +518,7 @@ by email on the provided email address. Click *Add license* to activate the lice
 ### Create an Open vStorage Backend
 
 **This step is only required in case you installed the Open Storage
-Backend packages. In case you only installed the Open vStorage core
+Backend packages. Without a license you will not be able to create an Open vStorage Backend. In case you only installed the Open vStorage core
 packages you can skip to the [add vPool section]( {{< relref "ESXi Installation.md" >}}#addvpool ) ..**
 
 -   Open the [Open vStorage GUI](/doc/Using%20the%20GUI) on the public IP of
@@ -665,7 +654,7 @@ now [add the first vPool]( {{< relref "ESXi Installation.md" >}}#addvpool ) to t
 ~~~~ {.sourceCode .python}
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 +++ Setup complete. +++
-+++ Point your browser to http://<IP of the Storage Router> to start using Open vStorage +++
++++ Point your browser to https://<IP of the Storage Router> to start using Open vStorage +++
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ~~~~
 

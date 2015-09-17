@@ -196,10 +196,6 @@ The initialization script will ask a couple of questions:
         will be possible). This should go to SATA. The more the better
         in this case as this is where VM data will end up. In case you
         use an object store this partition isn't used.
-    -   /mnt/db: mountpoint for the databases.This should be on SSD and
-        needs to be selected during installation.
-    -   /mnt/md: mountpoint for the volume metadata. This should be on
-        SSD.
     -   /mnt/cachex : mountpoints for the different caches (where X goes
         from 1 to as many SSDs in the server). This should be on SSD.
 -   Some examples of the default partition layout:
@@ -209,13 +205,6 @@ The initialization script will ask a couple of questions:
     -   In case you have 1 additional SATA disk, we will use 20% for
         /var/tmp and the rest for the local backend (/mnt/bfs). In case
         you have 2 SATA disks we will assign each to a separate SATA.
-    -   In case you have a single SSD, /mnt/db (25%), /mnt/md (25%) and
-        the cache (50%) will be created on this SSD.
-    -   In case you have 2 or more SSDs Open vStorage will put the
-        databases (/mnt/db - 25%) on the first SSD and the metadata
-        (/mnt/md - 25%) on the second SSD. The rest of these SSDs (75%)
-        will be used to create caches. SSD 3 and up will be used
-        completely to create cache partitions.
 -   Select the Public IP address of the KVM Node.
 -   Select KVM as hypervisor. In case VMware is used as hypervisor, use
     the [ESXi install documentation](/doc/ESXi%20Installation).
@@ -237,7 +226,7 @@ start using Open vStorage.
 
 ### Apply for a free license
 **This step is only required in case you installed the Open Storage
-Backend packages (openvstorage-hc). In case you only installed the Open vStorage core
+Backend packages (openvstorage-hc). Without a license you will not be able to create an Open vStorage Backend. In case you only installed the Open vStorage core
 packages you can skip to the [add vPool section]( {{< relref "KVM Installation.md" >}}#addvpool).**
 
 Apply for a free community license in the [Administration section](/doc/Using the GUI#administration).  To apply for a license fill in the
@@ -374,7 +363,7 @@ now [extend the vPool]( {{< relref "KVM Installation.md" >}}#extendvpool ) to th
 ~~~~ {.sourceCode .python}
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 +++ Setup complete. +++
-+++ Point your browser to http://<IP of the KVM> to start using Open vStorage +++
++++ Point your browser to https://<IP of the KVM> to start using Open vStorage +++
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ~~~~
 
