@@ -14,7 +14,7 @@ vStorage and if you have issues you can always ask the [Open vStorage
 community](https://groups.google.com/forum/#!forum/open-vstorage) for
 help.
 
-###Security
+### Security
 
 The API should only be used over HTTPS. Never relay the API trough an
 insecure channel.
