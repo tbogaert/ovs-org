@@ -102,7 +102,7 @@ Once the token is expired, a 401 Unauthorized error will be returned,
 stating "Token expired". Other possible errors are listed in the "API
 information/metadata" chapter in this documentation.
 
-###Versioning
+### Versioning
 
 The Open vStorage API supports versioning. All requests to resources
 need a version to be specified. This can be a specific version, or \*
@@ -204,7 +204,7 @@ Example response (when authenticated):
 }
 ~~~~
 
-###API Resources
+### API Resources
 
 The current API provides access to following resources:
 
@@ -236,7 +236,7 @@ It also provides two "special" resources:
 -   statistics: Statistical information about the DAL (Data Abstraction
     Layer).
 
-###General usage
+### General usage
 
 ### OPTIONS
 
