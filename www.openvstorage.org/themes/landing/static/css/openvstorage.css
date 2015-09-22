@@ -133,3 +133,5 @@ img {
 .internal-ref{
     display: block; min-height: 40px;
 }
+table {width: 100%;}
+table td {border: 1px solid #D4D4D4 !important; }
