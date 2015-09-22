@@ -102,7 +102,7 @@ Once the token is expired, a 401 Unauthorized error will be returned,
 stating "Token expired". Other possible errors are listed in the "API
 information/metadata" chapter in this documentation.
 
-###Versioning
+### Versioning
 
 The Open vStorage API supports versioning. All requests to resources
 need a version to be specified. This can be a specific version, or \*
@@ -204,7 +204,7 @@ Example response (when authenticated):
 }
 ~~~~
 
-###API Resources
+### API Resources
 
 The current API provides access to following resources:
 
@@ -236,7 +236,7 @@ It also provides two "special" resources:
 -   statistics: Statistical information about the DAL (Data Abstraction
     Layer).
 
-###General usage
+### General usage
 
 ### OPTIONS
 
@@ -519,7 +519,10 @@ Main actions:
 -   List: GET
 -   Resource: GET
 
-WARNING: UNSUPPORTED DOC, TABLES NOT SUPPORT YET.
+| Action |  Action/Link | Type | Input | Response |
+|----------|---------------|-------|----------|---------------|
+| NA | NA | NA | NA | NA |
+
 
 ### Clients
 
@@ -564,7 +567,9 @@ Main actions:
 -   List: GET
 -   Resource: GET, POST, DELETE
 
-WARNING: UNSUPPORTED DOC, TABLES NOT SUPPORT YET.
+| Action | Action/Link | Type | Input | Response |
+|--------|-------------|------|-------|----------|
+| NA | NA | NA | NA | NA |
 
 ### Groups
 
@@ -599,9 +604,11 @@ Main actions:
 -   List: GET
 -   Resource: GET
 
-WARNING: UNSUPPORTED DOC, TABLES NOT SUPPORT YET.
+| Action |  Action/Link | Type | Input | Response |
+|--------|--------------|------|-------|----------|
+| NA | NA | NA | NA | NA |
 
-###Management Centers
+### Management Centers
 
 ### Management center object structure
 
@@ -663,7 +670,9 @@ Main actions:
 -   List: GET
 -   Resource: GET, POST, DELETE
 
-WARNING: UNSUPPORTED DOC, TABLES NOT SUPPORT YET.
+| Action |  Action/Link | Type | Input | Response |
+|--------|--------------|------|-------|----------|
+| NA | NA | NA | NA | NA |
 
 ### pMachines
 
@@ -709,7 +718,9 @@ Main actions:
 -   List: GET
 -   Resource: GET, PATCH
 
-WARNING: UNSUPPORTED DOC, TABLES NOT SUPPORT YET.
+| Action |  Action/Link | Type | Input | Response |
+|--------|--------------|------|-------|----------|
+| NA | NA | NA | NA | NA |
 
 ### Roles
 
@@ -758,7 +769,9 @@ Main actions:
 -   List: GET
 -   Resource: GET
 
-WARNING: UNSUPPORTED DOC, TABLES NOT SUPPORT YET.
+| Action |  Action/Link | Type | Input | Response |
+|--------|--------------|------|-------|----------|
+| NA | NA | NA | NA | NA |
 
 ### StorageDrivers
 
@@ -830,7 +843,9 @@ Main actions:
 -   List: GET
 -   Resource: GET
 
-WARNING: UNSUPPORTED DOC, TABLES NOT SUPPORT YET.
+| Action |  Action/Link | Type | Input | Response |
+|--------|--------------|------|-------|----------|
+| Check whether a StorageDriver can be deleted | can_be_deleted | GET | | Boolean indicating whether the StorageDriver can be removed |
 
 ### StorageRouters
 
@@ -900,7 +915,15 @@ Main actions:
 -   List: GET
 -   Resource: GET
 
-WARNING: UNSUPPORTED DOC, TABLES NOT SUPPORT YET.
+| Action |  Action/Link | Type | Input | Response |
+|--------|--------------|------|-------|----------|
+| Move all vDisks away from this StorageRouter, if possible | move_away | POST | | GUID of a Celery task |
+| Get a list of available actions | get_available_actions | GET | | List of actions |
+| Gets physical metadata of the StorageRouter | get_physical_metadata | POST | {"files": "<comma separated list of files to check for existence>"} | GUID of a Celery task |
+| Gets package version info | get_version_info | GET | | GUID of a Celery task |
+| Checks S3 connectivity | check_s3 | POST | {"host": "<s3 host>", "port", <s3 port>, "accesskey": "<s3 access key>", "secretkey": "<s3 secret key>"} | GUID of a Celery task |
+| Checks whether a mountpoint path is empty | check_mtpt | POST | {"name": "<mountpoint path>"} | GUID of a Celery task |
+| Adds a vPool | add_vpool | POST | {"call_parameters": {"vpool_name": "<vpool name>", "type": "<vpool type>", "connection_host": "<host>", "connection_port": <port>, "connection_timeout": <timeout>, "connection_username": "<username>", "connection_password": "<password>", "mountpoint_temp": "<mountpoint>", "mountpoint_bfs": "<mountpoint>", "mountpoint_md": "<mountpoint>", "mountpoint_readcache1": "<mountpoint>", "mountpoint_readcache2": "<mountpoint>", "mountpoint_writecache": "<mountpoint>", "mountpoint_foc": "<mountpoint>", "storage_ip": "<ip>", "vrouter_port": <port> } } | GUID of a Celery task |
 
 ### Users
 
@@ -936,7 +959,9 @@ Main actions:
 -   List: GET, POST
 -   Resource: GET, POST, PATCH, DELETE
 
-WARNING: UNSUPPORTED DOC, TABLES NOT SUPPORT YET.
+| Action |  Action/Link | Type | Input | Response |
+|--------|--------------|------|-------|----------|
+| Set password | set_password | POST | {"current_password": <current password>, "new_password": <new password>} | Object data or 400 (Bad request) |
 
 ### vDisks
 
@@ -1182,7 +1207,9 @@ Main actions:
 -   List: GET
 -   Resource: GET
 
-WARNING: UNSUPPORTED DOC, TABLES NOT SUPPORT YET.
+| Action |  Action/Link | Type | Input | Response |
+|--------|--------------|------|-------|----------|
+| Rollback a vDisk | rollback | POST | {"timestamp": <timestamp>} | GUID of a Celery task |
 
 ### vMachines
 
@@ -1262,7 +1289,15 @@ Main actions:
 -   List: GET
 -   Resource: GET, DELETE
 
-WARNING: UNSUPPORTED DOC, TABLES NOT SUPPORT YET.
+| Action |  Action/Link | Type | Input | Response |
+|--------|--------------|------|-------|----------|
+| Rollback a vMachine | rollback | POST | {"timestamp": <timestamp>} | GUID of a Celery task |
+| Snapshot a vMachine | snapshot | POST | {"name": "<name>", "consistent" : <boolean>} | GUID of a Celery task |
+| Get the children from a vTemplate | get_children | GET | | List of GUIDs or a list of vMachine objects, depending on the contents |
+| Set as vTemplate | set_as_template | POST | | GUID of a Celery task |
+| Create from vTemplate | create_from_template | POST | {"pmachineguid": "<GUID of target pMachine>", "name": "<name of the new vMachine>", "description": "<description of the new vMachine>"} | GUID of a celery task |
+| Create multiple vMachines from vTemplate | create_multiple_from_template | POST | {"pmachineguids": \["<GUID 1>", "<GUID 2>"\], "amount": <integer>, "start": <integer>, "name": "<name of vMachines>", "description": "<description of vMachines>"} | GUID of a celery task |
+| Get a list of target pMachines to which a vTemplate can be cloned | get_target_pmachines | GET | | List of pMachine GUIDs |
 
 ### vPools
 
@@ -1367,7 +1402,11 @@ Main actions:
 -   List: GET
 -   Resource: GET
 
-WARNING: UNSUPPORTED DOC, TABLES NOT SUPPORT YET.
+| Action |  Action/Link | Type | Input | Response |
+|--------|--------------|------|-------|----------|
+| Sync the vMachines on this vPool | sync_vmachines | POST | | GUID of a Celery task |
+| List of StorageRouters serving this vPool | storagerouters | GET | List of StorageRouters |
+| Update StorageDrivers serving the vPool | update_storagedrivers | POST | {"storagerouter_guids": <list of StorageRouter GUIDs to append the vPool to (optional)>, "storagedriver_guid": "<GUID of a StorageDriver to use as a blueprint for the new StorageDrivers>", "storagedriver_guids": <optional list of StorageDriver GUIDs to remove>} | GUID of a Celery task |
 
 ### Tasks
 
@@ -1493,3 +1532,16 @@ Result:
     "122bae9d-4321-475c-a2bf-d39a3126ffbe"
 ]
 ~~~~
+
+
+
+
+
+| Tables   |      Are      |  Cool |
+|----------|---------------|-------|
+| col 1 is |  left-aligned | $1600 |
+| col 2 is |    centered   |   $12 |
+| col 3 is | right-aligned |    $1 |
+
+
+

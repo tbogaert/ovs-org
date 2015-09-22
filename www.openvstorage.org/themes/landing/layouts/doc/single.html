@@ -11,10 +11,16 @@
 		</div>
 		<div class="container page-container">
 			<div class="row">
-		          {{ .Content }}		
+		          {{ .Content }}
 			</div>
 		</div>
 	</div>
 </div>
 {{ partial "home_page/footer.html" . }}
 
+<script>
+// add bootstrap tables style
+$( document ).ready(function() {
+    $(".page-container").find('table').addClass('table table-bordered table-striped');
+});
+</script>
