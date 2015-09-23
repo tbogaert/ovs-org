@@ -54,7 +54,7 @@ echo "vm.dirty_background_bytes = 134217728" >> /etc/sysctl.conf
     packages) on all KVM nodes:
 
 ~~~~ {.sourceCode .python}
-echo "deb http://apt.openvstorage.org aurora/" > /etc/apt/sources.list.d/ovsaptrepo.list
+echo "deb http://apt.openvstorage.org boston/" > /etc/apt/sources.list.d/ovsaptrepo.list
 apt-get update; apt-get install openvstorage-hc
 ~~~~
 
@@ -113,7 +113,7 @@ The quick install guide for ESXi:
     packages) inside each Storage Router.
 
 ~~~~ {.sourceCode .python}
-echo "deb http://apt.openvstorage.org aurora/" > /etc/apt/sources.list.d/ovsaptrepo.list
+echo "deb http://apt.openvstorage.org boston/" > /etc/apt/sources.list.d/ovsaptrepo.list
 apt-get update; apt-get install openvstorage-hc
 ~~~~
 

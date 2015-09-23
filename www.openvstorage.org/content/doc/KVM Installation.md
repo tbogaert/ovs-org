@@ -140,7 +140,7 @@ Execute the next steps in the shell of all KVM Nodes:
 -   Add the repo to your sources
 
 ~~~~ {.sourceCode .python}
-echo "deb http://apt.openvstorage.org aurora/" > /etc/apt/sources.list.d/ovsaptrepo.list
+echo "deb http://apt.openvstorage.org boston/" > /etc/apt/sources.list.d/ovsaptrepo.list
 ~~~~
 
 There are 2 options to install Open vStorage. The first option is to
