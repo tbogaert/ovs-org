@@ -19,6 +19,7 @@ The different types are:
 -   Storage Driver: 1.3.6.1.4.1.29961.4.y.z
 -   Storage Routers: 1.3.6.1.4.1.29961.10.y.z
 -   vTemplates: 1.3.6.1.4.1.29961.11.y.z
+-   Backends: 1.3.6.1.4.1.29961.5.y.z
 
 You can extract all OID of a certain object by running the next code
 sample from the CLI:
