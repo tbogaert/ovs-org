@@ -127,9 +127,9 @@ name, type, administrator username, password and IP address.
 Once a HMC is added following details will be displayed:
 
 -   Name: friendly name used in the GUI.
--   IP: IP address the HMC is listening on.
+-   IP: IP address the HMC is listening on. For vCenter this is the IP of the vCenter server. For OpenStack this is the Virtual IP of the Controller nodes.
 -   Port: Port the HMC is listening on.
--   Type: Type of the Hypervisor Management Center.
+-   Type: Type of the Hypervisor Management Center. Currently only OpenStack and vCenter are supported.
 -   Username: Administrator username of the HMC.
 -   OVS Hosts/Total: The amount of Hosts known by the Open vStorage
     framework versus the total amount of Hosts registered in the HMC.

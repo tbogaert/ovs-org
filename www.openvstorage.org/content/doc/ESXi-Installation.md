@@ -447,6 +447,8 @@ apt-get update; apt-get install openvstorage-hc
 apt-get update; apt-get install openvstorage
 ~~~~
 
+**All Open vStorage nodes should have the same packages (openvstorage-hc or openvstorage) installed.**
+
 ### Initialize the first Storage Router
 
 -   You are now ready to initialize the first Storage Router. Execute in

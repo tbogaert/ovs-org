@@ -10,7 +10,11 @@ need to register the Open vStorage plugin as an OpenStack Cinder Plugin.
 
 In case you want to undo the changes made by the installation  of the Cinder Plugin follow [these steps]( {{< relref "Cinder Plugin.md" >}}#unconfigurecinder).
 
-### Configure Cinder and OpenStack
+### Open vStorage and OpenStack
+In contrary to DevStack, where all OpenStack functionality runs on a single node, OpenStack has split up the functionality between different nodes. A typical setup will have 3 Controller nodes. On these Controller nodes Open vStorage should not be installed.
+Open vStorage should only be installed on the Nova nodes. The first 3 nodes will by default be setup as master Open vStorage nodes (GUI, API, databases, ...) while additional nodes will be setup as extra nodes. For Open vStorage it is essential to also run the Cinder functionality (f.e. cinder-volume) on the Nova node.
+
+![](images/openstacksetup.png)
 
 #### Prerequisites
 
@@ -19,7 +23,7 @@ In case you want to undo the changes made by the installation  of the Cinder Plu
     sure OpenStack is installed first. 
 -   In the Administration section, select *Hypervisor Mgmt.*. Click *Add new Center* and complete the form. Next indicate at the bottom which Nova nodes you want to be managed by the OpenStack Controller Node. Do not create a vPool before you have registered the Hypervisor Management Center and added the nodes.
 -   Create a vPool and add the vPool to all nodes that run Cinder. In the documentation we  will use the name VPOOL1 and VPOOL2 as an example. In case you don't extend the vPool on all nodes, use storage_availability_zones to make sure the VM gets created on a Nova node which has the vPool configured (Juno, Kilo).
--   
+
 #### Changes required to the controller
 - Update the maximal amount of MySQL connections in /etc/mysql/my.cnf to 1000 and restart MySQL.
 

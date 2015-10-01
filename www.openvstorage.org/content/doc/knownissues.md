@@ -204,3 +204,13 @@ The issue is caused by entries which are manually added when setting up
 the vPool for use with Cinder the first time. Remove the Cinder vPool,
 manually edit /etc/nova/nova.conf and remove the instances\_path. Next
 restart the Nova services and follow the normal steps to add the vPool.
+
+# OpenStack Evacuate
+Due to a bug in OpenStack, the call to Evacuate a host when it is down goes to the host whihc is down. There is a manual work around which needs to be executed for every volume you want to evacuate.
+
+Before clicking Evacuate host update the cinder DB:
+~~~~ {.sourceCode .python}
+mysql -u root -p <password> -e "update volumes set host='<host you want to evacuate to>@<vpoolname>#<vpoolname>' where display_name='<volume you want to evacuate>';"
+~~~~
+
+Running Evacuate after updating the Cinder DB is now successful as the call to cinder-volume is routed to a host which is alive.
