@@ -215,7 +215,7 @@ by email on the provided email address. Click *Add license* to activate the lice
     the Storage Router and enter with the default login and password:
     admin/admin.
 -   Select from the menu *Storage Routers* and select the newly installed Storage Router from the list.
--   Select the Physical Disk Management tab. On this tab you can assign roles to the different detected physical disks.
+-   Select the Physical Disk Management tab. On this tab you can assign roles to the different detected physical disks. To assign a role to a disk click the gear icon and select the role from the dropdown.
 -   Assign a DB role to one of the SSDs. This will reserve 10% of the SSD for the distributed database. To prevent data loss make sure that at least 3 Storage Routers have his role. Note that this role can't be removed once set.
 -   Assign a scrub role to one of the disks. The scrubber is the application which does the garbage collection of snapshot data which is out of the retention. This will reserve 300 GB of space. All storage Routers must have at least one disk with the scrubbing role. Note that this role can't be removed once set.
 -   Assign the read or write role to the SSDs or PCIe flash cards you want to use as caching devices for the vPools. A Storage Router must have at least one disk with a read role assigned and one with the write role assigned. A disk can have both the read and write role assigned at the same time. The read and write role can only be removed in case no vPool is using them.
@@ -265,9 +265,6 @@ packages you can skip to the [add vPool section]( {{< relref "KVM Installation.m
 
 
 -   Enter a name for the vPool and select the type of Storage Backend:
-    -   In case *Local FS* (File System) is selected, no additional info
-        is required. Moving Virtual Machines between nodes will not be
-        possible. Use this option in single node environments only.
     -   In case *S3 compatible* is selected you will need to provide an
         access key, a secret key and connection (url or IP) and port to
         access the S3 compatible Storage Backend.
@@ -294,12 +291,7 @@ packages you can skip to the [add vPool section]( {{< relref "KVM Installation.m
 ![](images/addnewvpool\_tab1.png)
 
 -   On the second tab
-    -   In case of a local backend or distributed FS, select a
-        mountpoint for the backend filesystem to store the data.
-    -   Select a filesystem which will be used during scrubbing.
-    -   Select a mountpoint for the metadata.
-    -   Select a mountpoint for the different caches (or press enter to
-        select the default).
+    -   Select the amount of read and write cache you want to use for the vPool on the Storage Router.
     -   Select the Storage IP and vRouter port (the next 2 ports will
         also be used) to use.
 
@@ -330,15 +322,10 @@ The initialization script will ask a couple of questions:
 -   Enter the root credentials for the KVM Node.
 -   It will search for existing Open vStorage Clusters in the network.
     Select the Cluster created earlier.
--   By default Open vStorage will suggest a partition layout based upon
-    the detected disks. You can override this by selecting option 2 in
-    the menu and update the proposed partition layout.
 -   Select the Public IP address of the KVM Node.
 -   Select KVM as hypervisor. In case VMware is used as hypervisor, use
     the [ESXi install documentation](/doc/ESXi%20Installation).
 -   Select the public IP address of the Storage Router.
--   Select a mountpoint for the database. The default mountpoint is
-    /mnt/db.
 -   Enter the root password of the Storage Router to exchange the
     necessary SSH keys.
 
@@ -358,11 +345,11 @@ Open vStorage Cluster.
  <a name="extendvpool" class="internal-ref"></a>
 ### Extending a vPool across multiple nodes
 
+-   Configure the roles for the physical disks of the Storage Routers.
 -   Extend the vPool from the first node to additional nodes by going to
     the vPool detail page and selecting the nodes where you want the
     vPool to be available. Adding the vPool to another Storage Router
-    will use the exact same settings for the temporary filesystem, the
-    metadata, the cache and the Storage IP as on the first one.
+    will ask for the size of the read and write cache and  use the same Storage IP as on the first one.
 
 ### Final remarks
 
