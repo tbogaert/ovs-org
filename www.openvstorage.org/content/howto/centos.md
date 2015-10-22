@@ -50,5 +50,5 @@ yum install --nogpgcheck openvstorage-hc -y
 
 
 [Please let us know](https://groups.google.com/forum/#!forum/open-vstorage) if you have any issues with installing Open vStorage on CentOS :
--   incomplete packages, cannot be installed due to bugs in install scripts, or missing install scripts
--    missing dependencies, wrong dependencies, conflicting dependencies
+-   Incomplete packages, install issues due to bugs in install scripts, or missing install scripts
+-   Missing dependencies, wrong dependencies, conflicting dependencies
