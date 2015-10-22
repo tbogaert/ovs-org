@@ -419,7 +419,7 @@ Routers. Execute the next steps in the shell of all Storage Routers:
 -   Add the repo to your sources
 
 ~~~~ {.sourceCode .python}
-echo "deb http://apt.openvstorage.org boston/" > /etc/apt/sources.list.d/ovsaptrepo.list
+echo "deb http://apt.openvstorage.org chicago-community main" > /etc/apt/sources.list.d/ovsaptrepo.list
 ~~~~
 
 There are 2 options to install Open vStorage. The first option is to
@@ -465,35 +465,12 @@ The initialization script will ask a couple of questions:
     In case it has found a Cluster, select the option *Don't join any of
     these clusters.*.
 -   Enter a name for the Open vStorage Cluster.
--   Open vStorage will detect the available drives in the host and
-    propose the best suited partitioning layout based upon the detected
-    SSDs and SATA devices. You can override this by selecting option 2
-    in the menu and update the proposed partition layout. The partitions
-    used by Open vStorage are as follows:
-    -   /var/tmp: temporary filesystem which is used during scrubbing
-        (cleanup of out of retention data). This can be on SATA. This
-        must be at least a good couple of GB.
-    -   /mnt/bfs/: required only in case of a local backend (no vMotion
-        will be possible). This should go to SATA. The more the better
-        in this case as this is where VM data will end up. In case you
-        use an object store this partition isn't used.
-    -   /mnt/cachex : mountpoints for the different caches (where X goes
-        from 1 to as many SSDs in the server). This should be on SSD.
--   Some examples of the default partition layout:
-    -   In case you have only 1 disk which also contains the OS, all
-        partitions will be created as directories under the root file
-        system.
-    -   In case you have 1 additional SATA disk, we will use 20% for
-        /var/tmp and the rest for the local backend (/mnt/bfs). In case
-        you have 2 SATA disks we will assign each to a separate SATA.
 -   Select the Public IP address of the Storage Router.
 -   Select VMware as hypervisor. In case KVM is used as hypervisor, use
     the [KVM install documentation](/doc/KVM Installation).
 -   Enter the hostname of the host on which the Storage Router is
     running, the IP address and provide login and password.
 -   Select the public IP address of the Storage Router.
--   Select a mountpoint for the database. The default mountpoint is
-    /mnt/db.
 -   Enter the root password of the Storage Router to exchange the
     necessary SSH keys.
 
@@ -516,6 +493,16 @@ Apply for a free community license in the [Administration section](../../doc/Usi
 form with your name, company name, email address, telephone number and
 indicate that you accept the license agreement. You will receive a license key
 by email on the provided email address. Click *Add license* to activate the license. A community license is limited to 4 hosts, 16 ASDs and 49 vDisks. [Contact us](contactus) in case you need a larger license.
+
+### Configure the Storage Router disks
+-   Open the [Open vStorage GUI](/doc/Using%20the%20GUI) on the public IP of
+    the Storage Router and enter with the default login and password:
+    admin/admin.
+-   Select from the menu *Storage Routers* and select the newly installed Storage Router from the list.
+-   Select the Physical Disk Management tab. On this tab you can assign roles to the different detected physical disks.
+-   Assign a DB role to one of the SSDs. This will reserve 10% of the SSD for the distributed database. To prevent data loss make sure that at least 3 Storage Routers have his role. Note that this role can't be removed once set.
+-   Assign a scrub role to one of the disks. The scrubber is the application which does the garbage collection of snapshot data which is out of the retention. This will reserve 300 GB of space. All storage Routers must have at least one disk with the scrubbing role. Note that this role can't be removed once set.
+-   Assign the read or write role to the SSDs or PCIe flash cards you want to use as caching devices for the vPools. A Storage Router must have at least one disk with a read role assigned and one with the write role assigned. A disk can have both the read and write role assigned at the same time. The read and write role can only be removed in case no vPool is using them.
 
 ### Create an Open vStorage Backend
 
@@ -709,6 +696,7 @@ Open vStorage datastore for vMachines.
 -   In the Managed Hosts section, indicate all Hosts which are managed
     by the vCenter instance. This will allow these Hosts to be protected
     by HA in case this is activated in vCenter.
+
 
 ### Final remarks
 
