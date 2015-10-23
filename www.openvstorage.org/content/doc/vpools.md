@@ -67,6 +67,16 @@ The Backend details for a vPool are
 -   Read Speed: The current read speed from the Storage Backend.
 -   Write Speed: The current write speed to the Storage Backend.
 
+The Configuration details for a vPool are
+-   Cache Strategy: Cache on Read or Cache on Write
+-   Deduped mode: Deduped or Non-Deduped. When set to deduped all vDisks will be using a deduped read cache per Storage Router. On the individual vDisk page you can change the setting so the volumes becomes non-deduped and has its own cache. When the vPool setting is set to Non-Deduped all vDisks will have their own cache location. In this case it will not be possible to overrule this setting on the vDisk detail page.
+-   SCO Size: The size of the Storage Conatiner Objects (a collection of writes) which gets stored on the Backend.
+-   Write Buffer: The amount of data that can be in the DTL but not available in the Backend.
+-   DTL mode: The way new writes are stored in the Distributed Transaction Log (DTL). The DTL is making sure that you don't have data loss when a host goes down. The DTL of a volume is configured on another host as where the volume is running and contains the outstanding writes (writes which are not yet on the backend). Every write to the write buffer (local SSDs) of a volume also gets transferred to the DTL on another host. This transfer can be disabled (no DTL), synchronously or asynchronously.
+-   DTL Transport: Displays whether the vPool is using RDMA or standard TCP to transfer the DTL data.
+
+These setting will be by default applied to all vDisks. The settings can be changed on the individual vDisk Detail pages.
+
 ### vPool Actions
 
 #### Add a vPool
@@ -107,17 +117,9 @@ The Backend details for a vPool are
 ![](images/addnewvpool\_tab1.png)
 
 -   On the second tab
-    -   Select a filesystem for the temporary filesystem to use during
-        scrubbing. The default filesystem is /var/tmp.
-    -   Select a mountpoint for the distributed filesystem with the
-        virtual machine configuration data.
-    -   Select a mountpoint for the metadata. The default mountpoint is
-        /mnt/md.
-    -   Select a mountpoint for the cache (or press enter to select the
-        default). The default is /mnt/cache.
-    -   Select the Storage IP to use.
 
-![](images/addnewvpool\_tab1.png)
+
+
 
 #### Sync
 
@@ -144,8 +146,8 @@ details of a vDisk, click its name.
 
 All the Storage Routers which are currently serving this vPool are
 indicated with a marked checkbox. In case the vPool isn't a local file
-system it can be extended across multiple GSRs. To add a GSR select the
-checkbox next to the GSR name. To remove the vPool from a GSR unselect
-the checkbox next to the GSR name. Removing a vPool from being served by
-a GSR is only possible in case there aren't any vDisks being served by
-the vPool on that GSR. Press *Save changes* to confirm.
+system it can be extended across multiple Storage Routers. To add a Storage Router select the
+checkbox next to the Storage Router name. To remove the vPool from a Storage Router unselect
+the checkbox next to the Storage Router name. Removing a vPool from being served by
+a Storage Router is only possible in case there aren't any vDisks being served by
+the vPool on that Storage Router. Press *Save changes* to confirm.
