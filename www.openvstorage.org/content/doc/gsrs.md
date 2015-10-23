@@ -24,6 +24,7 @@ For each Storage Router following info is displayed:
 -   Host: Friendly name of the ESXi given during installation of the
     Storage Router. Hoover over the name to see the Public IP address of the Host.
 -   Type: Type of Hypervisor.
+-   RDMA Capable: Whether or not the Storage Router is RDMA capable.
 -   vDisks: Amount of vDisks served by the Storage Router.
 -   Stored Data: The total amount of Stored Data of all vDisks served by
     the Storage Router.
