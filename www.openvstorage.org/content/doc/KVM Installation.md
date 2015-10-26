@@ -304,7 +304,7 @@ packages you can skip to the [add vPool section]( {{< relref "KVM Installation.m
 
 -   On the fifth tab
     -   Validate the values and click *Finish* to complete.
-    
+
 Additional vPools can be added to the Storage Router by executing the
 same steps again.
 

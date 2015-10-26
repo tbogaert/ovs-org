@@ -31,7 +31,7 @@ For each vDisk following info is displayed:
 -   Read: The current read speed of the vDisk.
 -   Write: The current write speed of the vDisk.
 -   FOC: Status of the FailOver Cache, a copy of the write cache of the
-    vDisk, on another GSR to prevent dataloss. The status can be healthy
+    vDisk, on another Storage Router to prevent dataloss. The status can be healthy
     of degraded.
 
 <a name="vdisk_details" class="internal-ref"></a>
@@ -45,13 +45,13 @@ page:
 
 -   vMachine: The vMachine to which the vDisk is attached.
 -   vPool: The vPool the vDisks is stored on.
--   GSR: The Grid Storage Router (GSR) to which the vDisk connects to
+-   Storage Router: The Storage Router to which the vDisk connects to
     access its storage.
 -   Size: Size of the vDisk.
 -   Stored Data: Total size of the current data and the Snapshots
     without the overhead imposed by the Backend redundancy.
--   FOC: Status of the FailOver Cache, a copy of the write cache of the
-    vDisk, on another GSR to prevent dataloss. The status can be healthy
+-   DTL: Status of the Distributed Transaction Log, a copy of the write cache of the
+    vDisk, on another Storage Router to prevent dataloss. The status can be healthy
     of degraded.
 -   \# Snapshots: The amount of snapshots stored of the vDisks.
 -   Cache : The current amount of Cache Hits on the vPool by the vDisk.
@@ -72,3 +72,13 @@ rollback can not be undone.
 
 At the bottom of the vDisk Details page all snapshots of the vDisk are
 listed.
+
+### Management actions
+Under Management actions you can define the settings for the VDisk/
+-   Distributed Transaction Log mode: Currently you can set the DTL to on or off.
+-   The Caching method: Cache on Read/Cache on Write.
+-   Deduped/non-deduped policy for vDisks. In case teh setting is set to deduped it can be changed to non-deduped. Changing a vDisk from non-deduped to deduped isn't supported. It is advised to limit to the size the non-deduped vDisk can take in the read cache.
+-   The SCO size: a collection of writes which gets stored on the Backend.
+-   Size of the Write Buffer: the amount of data that can be in the DTL but not available in the Backend.
+
+![](images/vdiskconfigsettings.png)
