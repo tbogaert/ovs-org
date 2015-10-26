@@ -80,17 +80,13 @@ These setting will be by default applied to all vDisks. The settings can be chan
 ### vPool Actions
 
 #### Add a vPool
+**Before you can add a vPool to a Storage Router make sure you have configured the physical disks of the Storage Router.**
+ To add a new vPool to the Open vStorage Cluster execute following steps.
 
--   To add a new vPool to the Open vStorage Cluster
-
-![](images/addnewvpool.png)
+![](images/addnewvpool1.png)
 
 
 -   Enter a name for the vPool and select the type of Storage Backend:
-    -   In case Local FS(File System) is selected, no additional info is
-        required. Use this option only in case you want to setup a quick
-        test environment on a single node, single disk backend and do
-        not want to test VM migration between nodes.
     -   In case S3 compatible is selected you will need to provide an
         access key, a secret key and connection (url or IP) and port to
         access the Amazon S3 compatible Storage Backend.
@@ -111,15 +107,33 @@ These setting will be by default applied to all vDisks. The settings can be chan
         the available Backends. Use this option in case you want to run
         Open vStorage hyperconverged (using the SATA disk inside the
         Storage Router as Tier 2 storage).
--   Select the Storage Router as Initial Storage Router and enter the
-    root password of the Storage Router. Click *Next* to continue.
+-   Select the Storage Router as Initial Storage Router. Click *Next* to continue.
 
-![](images/addnewvpool\_tab1.png)
+![](images/addnewvpool2.png)
 
 -   On the second tab
+    -   Specify the Read and write Cache size to be assigned for the vPool on the Storage Router.
+    -   Select the Storage IP. Use 127.0.0.1 in case of KVM or the IP in Storage Network for ESXi.
 
+![](images/addnewvpool3.png)
 
+-   On the third tab
+    -   Define the Distributed Transaction Log mode: Currently you can set the DTL to on or off.
+    -   Select the default Caching method for vDisks.
+    -   Select the default deduped/non-deduped policy for vDisks. In case the value is set to deduped, the value can be overwritten on the vDisk detail page.
+    -   Select the SCO size (a collection of writes which gets stored on the Backend).
+    -   Select the Write Buffer (the amount of data that can be in the DTL but not available in the Backend).
 
+![](images/addnewvpool4.png)
+
+-   On the fourth tab
+    -   In case you have a [Hypervisor Management Center](../../doc/Using%20the%20GUI#hmc) (vCenter, OpenStack) configured, you can automatically configure the vPool on the hypervisor.
+    -   In case you don't have a Hypervisor Management Center configured, you will not be able to check the checkbox. Some manual actions might have to be taken to correctly configure the host to use the vPool.
+
+![](images/addnewvpool3.png)
+
+-   On the fifth tab
+    -   Validate the values and click *Finish* to complete.
 
 #### Sync
 
