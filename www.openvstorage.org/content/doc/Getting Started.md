@@ -54,7 +54,7 @@ echo "vm.dirty_background_bytes = 134217728" >> /etc/sysctl.conf
     packages) on all KVM nodes:
 
 ~~~~ {.sourceCode .python}
-echo "deb http://apt.openvstorage.org boston/" > /etc/apt/sources.list.d/ovsaptrepo.list
+echo "deb http://apt.openvstorage.org chicago-community main" > /etc/apt/sources.list.d/ovsaptrepo.list
 apt-get update; apt-get install openvstorage-hc
 ~~~~
 
@@ -66,8 +66,9 @@ ovs setup
 ~~~~
 
 -   Open the GUI on the IP address of the KVM node and login with the
-    default administrator credentials username:admin, password:admin. In
-    case you want to run Open vStorage hyperconverged, create an Open
+    default administrator credentials username:admin, password:admin.
+-   Go to the Storage Router detail page and select the Physical Disk Management tab. Assign a db and scrub role to at least one SSD disk. Assign read and write roles to SSDs you want to use as cache.
+-   In case you want to run Open vStorage hyperconverged, create an Open
     vStorage Backend in the Backend section. Note that running Open
     vStorage as hyperconverged solution will require you to [get a free
     license](http://license.openvstorage.com).
@@ -113,7 +114,7 @@ The quick install guide for ESXi:
     packages) inside each Storage Router.
 
 ~~~~ {.sourceCode .python}
-echo "deb http://apt.openvstorage.org boston/" > /etc/apt/sources.list.d/ovsaptrepo.list
+echo "deb http://apt.openvstorage.org chicago-community main" > /etc/apt/sources.list.d/ovsaptrepo.list
 apt-get update; apt-get install openvstorage-hc
 ~~~~
 
@@ -125,8 +126,9 @@ ovs setup
 ~~~~
 
 -   Open the GUI on the IP address of the KVM node and login with the
-    default administrator credentials username:admin, password:admin. In
-    case you want to run Open vStorage hyperconverged, create an Open
+    default administrator credentials username:admin, password:admin.
+-   Go to the Storage Router detail page and select the Physical Disk Management tab. Assign a db and scrub role to at least one SSD disk. Assign read and write roles to SSDs you want to use as cache.
+-   In case you want to run Open vStorage hyperconverged, create an Open
     vStorage Backend in the Backend section. Note that running Open
     vStorage as hyperconverged solution will require you to [get a free
     license](http://license.openvstorage.com). Next, create your first
