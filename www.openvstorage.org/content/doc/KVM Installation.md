@@ -285,22 +285,26 @@ packages you can skip to the [add vPool section]( {{< relref "KVM Installation.m
         the available Backends. Use this option in case you want to run
         Open vStorage hyperconverged (using the SATA disk inside the
         Storage Router as Tier 2 storage). Select a Preset from  the dropdown. This Preset defines how data is stored on the backend (e.f. 3-way replication). You can add more Presets in the detail page of a [Backend](/doc/backends). **Once the vPool is created the Preset can't be changed.**
--   Select the Storage Router as Initial Storage Router and enter the
-    root password of the Storage Router. Click *Next* to continue.
-
-![](images/addnewvpool\_tab1.png)
+-   Select the Storage Router as Initial Storage Router. Click *Next* to continue.
 
 -   On the second tab
-    -   Select the amount of read and write cache you want to use for the vPool on the Storage Router.
-    -   Select the Storage IP and vRouter port (the next 2 ports will
-        also be used) to use.
-
-![](images/addnewvpool\_tab2.png)
+    -   Specify the Read and write Cache size to be assigned for the vPool on the Storage Router.
+    -   Select the Storage IP. Use 127.0.0.1 in case of KVM or the IP in Storage Network for ESXi.
 
 -   On the third tab
-    -   In case you have a [Hypervisor Management Center](../../doc/Using%20the%20GUI#hmc) (OpenStack) configured, you can automatically configure the vPool on the hypervisor. Select the checkbox to automatically configure Cinder on the Nova host.
-    -   In case you don't have a Hypervisor Management Center configured, you will not be able to check the checkbox. Some manual actions might have to be taken to correctly configure the KVM host to use the vPool.
+    -   Define the Distributed Transaction Log mode: Currently you can set the DTL to on or off.
+    -   Select the default Caching method for vDisks.
+    -   Select the default deduped/non-deduped policy for vDisks. In case the value is set to deduped, the value can be overwritten on the vDisk detail page.
+    -   Select the SCO size (a collection of writes which gets stored on the Backend).
+    -   Select the Write Buffer (the amount of data that can be in the DTL but not available in the Backend).
 
+-   On the fourth tab
+    -   In case you have a [Hypervisor Management Center](../../doc/Using%20the%20GUI#hmc) (vCenter, OpenStack) configured, you can automatically configure the vPool on the hypervisor.
+    -   In case you don't have a Hypervisor Management Center configured, you will not be able to check the checkbox. Some manual actions might have to be taken to correctly configure the host to use the vPool.
+
+-   On the fifth tab
+    -   Validate the values and click *Finish* to complete.
+    
 Additional vPools can be added to the Storage Router by executing the
 same steps again.
 
