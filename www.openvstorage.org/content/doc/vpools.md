@@ -29,8 +29,9 @@ For each vPool following info is displayed:
 -   Connection: The Connection (IP, URL, Domainname, Zone, ...) for the
     Storage Backend.
 -   Login: Login/Username used to connect to the Storage Backend.
--   
+
 <a name="details" class="internal-ref"></a>
+
 ### vPool Details
 
 The vPool Details page displays the detailed performance statistics of a
@@ -68,6 +69,7 @@ The Backend details for a vPool are
 -   Write Speed: The current write speed to the Storage Backend.
 
 The Configuration details for a vPool are
+
 -   Cache Strategy: Cache on Read or Cache on Write
 -   Deduped mode: Deduped or Non-Deduped. When set to deduped all vDisks will be using a deduped read cache per Storage Router. On the individual vDisk page you can change the setting so the volumes becomes non-deduped and has its own cache. When the vPool setting is set to Non-Deduped all vDisks will have their own cache location. In this case it will not be possible to overrule this setting on the vDisk detail page.
 -   SCO Size: The size of the Storage Conatiner Objects (a collection of writes) which gets stored on the Backend.
