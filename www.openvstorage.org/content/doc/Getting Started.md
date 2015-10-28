@@ -67,7 +67,7 @@ ovs setup
 
 -   Open the GUI on the IP address of the KVM node and login with the
     default administrator credentials username:admin, password:admin.
--   Go to the Storage Router detail page and select the Physical Disk Management tab. Assign a db and scrub role to at least one SSD disk. Assign read and write roles to SSDs you want to use as cache.
+-   Go to the Storage Router detail page and select the Physical Disk Management tab. Assign a DB and scrub role to at least one SSD disk. Assign read and write roles to SSDs you want to use as cache.
 -   In case you want to run Open vStorage hyperconverged, create an Open
     vStorage Backend in the Backend section. Note that running Open
     vStorage as hyperconverged solution will require you to [get a free
@@ -127,7 +127,7 @@ ovs setup
 
 -   Open the GUI on the IP address of the KVM node and login with the
     default administrator credentials username:admin, password:admin.
--   Go to the Storage Router detail page and select the Physical Disk Management tab. Assign a db and scrub role to at least one SSD disk. Assign read and write roles to SSDs you want to use as cache.
+-   Go to the Storage Router detail page and select the Physical Disk Management tab. Assign a DB and scrub role to at least one SSD disk. Assign read and write roles to SSDs you want to use as cache.
 -   In case you want to run Open vStorage hyperconverged, create an Open
     vStorage Backend in the Backend section. Note that running Open
     vStorage as hyperconverged solution will require you to [get a free
