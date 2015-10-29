@@ -45,7 +45,7 @@ yum install --nogpgcheck --enablerepo=fc22 librbd1 librados2 gcc volumedriver-se
 ~~~~
 -   Install Open vStorage
 ~~~~ {.sourceCode .python}
-yum install --nogpgcheck openvstorage-hc -y
+yum install --nogpgcheck openvstorage -y
 ~~~~
 - As root, disable SELinux
 ~~~~ {.sourceCode .python}
