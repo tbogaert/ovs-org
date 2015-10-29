@@ -42,13 +42,18 @@ gpgcheck=0' > /etc/yum.repos.d/ovs.repo
 -   First install the dependencies
 ~~~~ {.sourceCode .python}
 yum install --nogpgcheck --enablerepo=fc22 librbd1 librados2 gcc volumedriver-server -y
-~~~~ {.sourceCode .python}
+~~~~
 -   Install Open vStorage
 ~~~~ {.sourceCode .python}
 yum install --nogpgcheck openvstorage-hc -y
 ~~~~
-
+- As root, disable SELinux
+~~~~ {.sourceCode .python}
+setenforce 0
+~~~~
+- Continue with the usual Open vStorage install steps  (run ovs setup) as described in the [KVM installation instructions](../../doc/KVM%20Installation/).
 
 [Please let us know](https://groups.google.com/forum/#!forum/open-vstorage) if you have any issues with installing Open vStorage on CentOS :
+
 -   Incomplete packages, install issues due to bugs in install scripts, or missing install scripts
 -   Missing dependencies, wrong dependencies, conflicting dependencies
