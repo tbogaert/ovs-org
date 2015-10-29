@@ -10,6 +10,7 @@ Next to Ubuntu, Open vStorage can also be installed on centOS 7
 ### The limitations:
 - No name based releases (yet) or quality levels to select from
 - Needs external repos (no upstream internally)
+- The Open vStorage Backend is not yet completely ported
 
 ### Install Open vStorage on CentOS 7
 -   Install CentOS7
@@ -45,7 +46,7 @@ yum install --nogpgcheck --enablerepo=fc22 librbd1 librados2 gcc volumedriver-se
 ~~~~
 -   Install Open vStorage
 ~~~~ {.sourceCode .python}
-yum install --nogpgcheck openvstorage-hc -y
+yum install --nogpgcheck openvstorage -y
 ~~~~
 - As root, disable SELinux
 ~~~~ {.sourceCode .python}
