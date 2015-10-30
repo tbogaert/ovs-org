@@ -6,9 +6,6 @@ title = "Support"
 ### Introduction
 Open vStorage has a free public [Open vStorage discussion group](https://groups.google.com/forum/#!forum/open-vstorage). This group offers community help and is targeted at helping new users how to setup and use Open vStorage. Be aware applying the answers provided in the forum are at your own risk.
 
-### Professional Support & Services
-Professional support and services are available for users that want to protect their Open vStorage production environments or need expertise on how to setup for production. Professional support is offered by [Open vStorage](http://www.openvstorage.com/). Please contact sales@openvstorage.com for pricing and availability.
-
 ### Inspecting Celery workers and their tasks.
 #### API
 By using the API resource at https://ip/api/tasks/ one can – after logging in – get an overview of all tasks active, scheduled, revoked or reserved on workers. See the API documentation for more details on how to use the API.
