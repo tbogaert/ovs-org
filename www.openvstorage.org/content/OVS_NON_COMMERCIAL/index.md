@@ -6,7 +6,7 @@ title = "OVS Non-commercial"
 
 Open vStorage Non-Commercial License?  
 Copyright 2015, iNuron NV  
-?Version 1.0, October 2015?  
+Version 1.0, October 2015  
 Redistribution and use in source and/or binary forms, with or without  
 modification, are subject to the terms and conditions of the Apache 2.0  
 license (http://www.apache.org/licenses/LICENSE-2.0), with the following additional  restrictions:  
